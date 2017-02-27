@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"D:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\common\bin\cspybat" -f "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_3\settings\MPU9250.Debug.general.xcl" --backend -f "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_3\settings\MPU9250.Debug.driver.xcl" 
+"D:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\common\bin\cspybat" -f "E:\root\FlightControllerFreeRTOS\settings\MPU9250.Debug.general.xcl" --backend -f "E:\root\FlightControllerFreeRTOS\settings\MPU9250.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"D:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\common\bin\cspybat" -f "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_3\settings\MPU9250.Debug.general.xcl" "--debug_file=%~1" --backend -f "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_3\settings\MPU9250.Debug.driver.xcl" 
+"D:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\common\bin\cspybat" -f "E:\root\FlightControllerFreeRTOS\settings\MPU9250.Debug.general.xcl" "--debug_file=%~1" --backend -f "E:\root\FlightControllerFreeRTOS\settings\MPU9250.Debug.driver.xcl" 
 
 @echo off 
 :end
