@@ -259,6 +259,7 @@ void STM_LED_Set(Led_TypeDef led,uint8_t state);
 void SendByte(uint8_t dat);
 
 /* SPI function */
+void SPI1_Init(void);
 uint8_t SPI1_RW(uint8_t byte);
 
 /* SD Card Function Init */

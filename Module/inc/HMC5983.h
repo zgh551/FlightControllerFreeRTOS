@@ -82,11 +82,11 @@ typedef struct {
 bool HMC5983_TestConnection( void );
 
 void HMC5983_Configure(void);
-void HMC5983GetData( int16_t *dataIMU );
-void HMC5983GetFloatData( float *dataIMU );
+void HMC5983_GetData( int16_t *dataIMU );
+void HMC5983_GetFloatData( float *dataIMU );
 void MagCorrect( float *dataIMU , float *CorrectDataIMU );
 void MagCorrectOffset( float *dataIMU , float *CorrectDataIMU );
-void HMC5983SendData(float *dat);
+void HMC5983_SendData(float *dat);
 #ifdef __cplusplus
 }
 #endif

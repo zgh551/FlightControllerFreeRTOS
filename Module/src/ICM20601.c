@@ -52,7 +52,7 @@ bool ICM20601_TestConnection(void)
   }
 }
 
-void ICM20601_getData( float *dataIMU )
+void ICM20601_GetFloatData( float *dataIMU )
 {
   uint8_t tmpRead[14];
 
@@ -124,7 +124,6 @@ void ICM20601_Init(void)
     ICM20601_WriteReg(ConfigParameter[i][0],ConfigParameter[i][1]);
     vTaskDelay( pdMS_TO_TICKS( 10 ) );
   }
-  
   ICM20601_Offset_Correct();
 }
 //  int16_t Acc_X_Offset,Acc_Y_Offset,Acc_Z_Offset;

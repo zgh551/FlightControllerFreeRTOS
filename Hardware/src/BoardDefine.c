@@ -133,7 +133,7 @@ static void SPI1_GPIO_Init(void)
   GPIO_Init(HMC5983_SPI_nCS_PORT, &GPIO_InitStructure);
 }
 
-static void SPI1_Init(void)
+void SPI1_Init(void)
 {
   SPI_InitTypeDef SPI_InitStructure;
   SPI1_GPIO_Init();

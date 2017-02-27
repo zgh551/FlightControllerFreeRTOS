@@ -108,7 +108,7 @@ void HMC5983_Configure(void)
   printf("HMC5983 Init ...");
 }
 
-void HMC5983GetInt16Data( int16_t *dataIMU )
+void HMC5983_GetInt16Data( int16_t *dataIMU )
 {
   uint8_t temp_data[6];
   if(HMC5983_ReadReg(SR)&0x01)
@@ -120,7 +120,7 @@ void HMC5983GetInt16Data( int16_t *dataIMU )
   }
 }
 
-void HMC5983GetFloatData( float *dataIMU )
+void HMC5983_GetFloatData( float *dataIMU )
 {
   uint8_t temp_data[6];
   uint8_t status;
@@ -154,7 +154,7 @@ void MagCorrectOffset( float *dataIMU , float *CorrectDataIMU )
   CorrectDataIMU[2] = dataIMU[2] - MagOffsetZ;
 }
 
-void HMC5983SendData(float *dat)
+void HMC5983_SendData(float *dat)
 {
   uint8_t CRC_Sum,i,j;
   CRC_Sum = 0;

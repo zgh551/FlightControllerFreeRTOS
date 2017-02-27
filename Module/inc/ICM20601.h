@@ -66,7 +66,7 @@ void ICM20601_ReadRegs(uint8_t readAddr, uint8_t *readData, uint8_t lens);
 
 void ICM20601_Init(void);
 bool ICM20601_TestConnection(void);
-void ICM20601_getData( float *dataIMU );
+void ICM20601_GetFloatData( float *dataIMU );
 #ifdef __cplusplus
 }
 #endif
