@@ -1,3 +1,3 @@
 #Flight Controller Free RTOS 
 ##Tool
-this project use the IAR toll to compile the souce file
+This project use the IAR tool to compile the source file
