@@ -63,7 +63,19 @@
 #include "CRTP.h"
 #include "commander.h"
 #include "ComModule.h"
-    
+
+/*HAL = Hardware Aplication Level*/
+#include "IMU.h"
+
+/*Algorithm*/
+#include "MahonyAHRS.h"
+
+/*Cintrol*/
+#include "pid.h"
+#include "pidctrl.h" 
+#include "controller.h"
+#include "stabilizer.h"
+
 extern FIL *fil;
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

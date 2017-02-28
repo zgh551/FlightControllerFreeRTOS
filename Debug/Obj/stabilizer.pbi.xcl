@@ -1,4 +1,4 @@
-"E:\root\FlightControllerFreeRTOS\DLL\src\RadioLink.c"
+"E:\root\FlightControllerFreeRTOS\Control\src\stabilizer.c"
 -std=c99
 -ferror-limit=100
 -I

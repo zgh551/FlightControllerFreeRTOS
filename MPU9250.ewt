@@ -3495,6 +3495,21 @@
     </file>
   </group>
   <group>
+    <name>Control</name>
+    <file>
+      <name>$PROJ_DIR$\Control\src\controller.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\pid.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\pidctrl.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\stabilizer.c</name>
+    </file>
+  </group>
+  <group>
     <name>DLL</name>
     <file>
       <name>$PROJ_DIR$\DLL\src\commander.c</name>
