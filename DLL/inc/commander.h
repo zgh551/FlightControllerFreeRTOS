@@ -15,7 +15,7 @@ typedef enum
   ANGLE
 } RPYType;
 
-typedef struct _CRTPPacket CRTPPacket;
+//typedef struct _CRTPPacket CRTPPacket;
 
 void commanderInit(void);
 bool commanderTest(void);

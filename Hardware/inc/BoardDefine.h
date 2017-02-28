@@ -1,19 +1,18 @@
-#ifndef _BOARDDEFINE_H_
-#define _BOARDDEFINE_H_
+#ifndef __BOARDDEFINE_H__
+#define __BOARDDEFINE_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include "main.h"
-  
-/****LED Define ****/
+
+///****LED Define ****/
 typedef enum _Led_TypeDef
 {
   LEDL=0,
   LEDR
 }Led_TypeDef;
-//Led_Type  Led_TypeDef;
 
 #define  ON     1
 #define  OFF    0

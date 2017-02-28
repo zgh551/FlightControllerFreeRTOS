@@ -3471,6 +3471,15 @@
     </settings>
   </configuration>
   <group>
+    <name>Algorithm</name>
+    <file>
+      <name>$PROJ_DIR$\Algorithm\src\MadgwickAHRS.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Algorithm\src\MahonyAHRS.c</name>
+    </file>
+  </group>
+  <group>
     <name>Application</name>
     <file>
       <name>$PROJ_DIR$\Application\src\LedSeq.c</name>

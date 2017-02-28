@@ -14,8 +14,8 @@ typedef struct
   Axis3i16   buffer[IMU_NBR_OF_BIAS_SAMPLES];
 } BiasObj;
 
-static BiasObj    gyroBias;
-static BiasObj    accelBias;
+//static BiasObj    gyroBias;
+//static BiasObj    accelBias;
 //static int32_t    varianceSampleTime;
 //
 //static Axis3i16   gyroMpu;
@@ -46,14 +46,14 @@ void IMU_Init(void)
   if(isInit)
     return;
 
- isHmc5983lPresent = false;
+ isHmc5983lPresent = true;
  isMs5611Present   = false;
 
   // Wait for sensors to startup,about one second startup
   while (xTaskGetTickCount() < pdMS_TO_TICKS(IMU_STARTUP_TIME_MS));
   //hardware Inintial the io port
   SPI1_Init(); 
-  printf("SPI  Init Finish\n");
+  printf("Sensors SPI Init Finish\n");
   
   //use the SPI bus to connect the ICM20602
   if (ICM20601_TestConnection() == SUCCESS)

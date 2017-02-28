@@ -28,6 +28,8 @@ E:\root\FlightControllerFreeRTOS\DLL\inc
 -I
 E:\root\FlightControllerFreeRTOS\HAL\inc
 -I
+E:\root\FlightControllerFreeRTOS\Algorithm\inc
+-I
 D:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\arm\inc
 -I
 D:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\arm\inc\c
@@ -57,6 +59,8 @@ E:\root\FlightControllerFreeRTOS\Application\inc
 E:\root\FlightControllerFreeRTOS\DLL\inc
 -I
 E:\root\FlightControllerFreeRTOS\HAL\inc
+-I
+E:\root\FlightControllerFreeRTOS\Algorithm\inc
 -DUSE_STDPERIPH_DRIVER=1
 -DSTM32F427_437xx=1
 -D_DLIB_FILE_DESCRIPTOR=1
