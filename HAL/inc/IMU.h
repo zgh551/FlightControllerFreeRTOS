@@ -34,7 +34,7 @@ extern "C" {
          int32_t z;
  } Axis3i32;
 
- typedef struct {
+ typedef struct _Axis3f{
          float x;
          float y;
          float z;
@@ -43,6 +43,8 @@ extern "C" {
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
 /* Exported function prototypes ----------------------------------------------*/
+void IMU_Init(void); 
+ 
 #ifdef __cplusplus
 }
 #endif

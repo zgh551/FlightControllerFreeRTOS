@@ -585,9 +585,9 @@ void HardwarePeripheralInit(void)
 //  SPI1_Init();
 //  printf("SPI  Init Finish\n");
 //  
-//  PPM_GPIO_Config();
-//  PPM_TIM_Config();
-//  printf("PPM  Init Finish\n");
+  PPM_GPIO_Config();
+  PPM_TIM_Config();
+  printf("PPM  Init Finish\n");
 //  
 //  Tim1Configure();
 //  printf("TIM1  Init Finish\n");

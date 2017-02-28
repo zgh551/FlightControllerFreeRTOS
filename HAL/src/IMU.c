@@ -101,11 +101,15 @@ void IMU_Init(void)
 //  sinPitch = sin(configblockGetCalibPitch() * M_PI/180);
 //  cosRoll = cos(configblockGetCalibRoll() * M_PI/180);
 //  sinRoll = sin(configblockGetCalibRoll() * M_PI/180);
-  /**/
 //  cosPitch = cos(0.0 * M_PI/180);
 //  sinPitch = sin(0.0 * M_PI/180);
 //  cosRoll  = cos(0.0 * M_PI/180);
 //  sinRoll  = sin(0.0 * M_PI/180);
-	
   isInit = true;
+}
+
+
+void imu6Read(Axis3f *gyro,Axis3f *acc)
+{
+  ICM20601_GetData(gyro,acc);
 }

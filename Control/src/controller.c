@@ -121,34 +121,7 @@ void controllerResetAllPID(void)
 
 void controllerGetActuatorOutput(int16_t* roll, int16_t* pitch, int16_t* yaw)
 {
-  *roll = rollOutput;
+  *roll  = rollOutput;
   *pitch = pitchOutput;
-  *yaw = yawOutput;
+  *yaw   = yawOutput;
 }
-
-/*
-PARAM_GROUP_START(pid_attitude)
-PARAM_ADD(PARAM_FLOAT, roll_kp, &pidRoll.kp)
-PARAM_ADD(PARAM_FLOAT, roll_ki, &pidRoll.ki)
-PARAM_ADD(PARAM_FLOAT, roll_kd, &pidRoll.kd)
-PARAM_ADD(PARAM_FLOAT, pitch_kp, &pidPitch.kp)
-PARAM_ADD(PARAM_FLOAT, pitch_ki, &pidPitch.ki)
-PARAM_ADD(PARAM_FLOAT, pitch_kd, &pidPitch.kd)
-PARAM_ADD(PARAM_FLOAT, yaw_kp, &pidYaw.kp)
-PARAM_ADD(PARAM_FLOAT, yaw_ki, &pidYaw.ki)
-PARAM_ADD(PARAM_FLOAT, yaw_kd, &pidYaw.kd)
-PARAM_GROUP_STOP(pid_attitude)
-
-PARAM_GROUP_START(pid_rate)
-PARAM_ADD(PARAM_FLOAT, roll_kp, &pidRollRate.kp)
-PARAM_ADD(PARAM_FLOAT, roll_ki, &pidRollRate.ki)
-PARAM_ADD(PARAM_FLOAT, roll_kd, &pidRollRate.kd)
-PARAM_ADD(PARAM_FLOAT, pitch_kp, &pidPitchRate.kp)
-PARAM_ADD(PARAM_FLOAT, pitch_ki, &pidPitchRate.ki)
-PARAM_ADD(PARAM_FLOAT, pitch_kd, &pidPitchRate.kd)
-PARAM_ADD(PARAM_FLOAT, yaw_kp, &pidYawRate.kp)
-PARAM_ADD(PARAM_FLOAT, yaw_ki, &pidYawRate.ki)
-PARAM_ADD(PARAM_FLOAT, yaw_kd, &pidYawRate.kd)
-PARAM_GROUP_STOP(pid_rate)
-*/
-

@@ -30,7 +30,6 @@
 extern "C" {
 #endif
   
-#include <stdbool.h>
 #include "main.h"
 
 void stabilizerInit(void);

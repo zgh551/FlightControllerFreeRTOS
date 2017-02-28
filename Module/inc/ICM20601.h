@@ -5,6 +5,8 @@ extern "C" {
 #endif
 
 #include "main.h"
+
+typedef struct _Axis3f Axis3f;
 #define ICM20601_SELF_TEST_XG           ((uint8_t)0x00)
 #define ICM20601_SELF_TEST_YG           ((uint8_t)0x01)
 #define ICM20601_SELF_TEST_ZG           ((uint8_t)0x02)
@@ -67,6 +69,7 @@ void ICM20601_ReadRegs(uint8_t readAddr, uint8_t *readData, uint8_t lens);
 void ICM20601_Init(void);
 bool ICM20601_TestConnection(void);
 void ICM20601_GetFloatData( float *dataIMU );
+void ICM20601_GetData( Axis3f *gyro,Axis3f *acc );
 #ifdef __cplusplus
 }
 #endif

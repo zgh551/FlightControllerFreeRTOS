@@ -56,16 +56,15 @@ static Axis3f gyro; // Gyro axis data in deg/s
 static Axis3f acc;  // Accelerometer axis data in mG
 static Axis3f mag;  // Magnetometer axis data in testla
 
- float eulerRollActual;
- float eulerPitchActual;
- float eulerYawActual;
+float eulerRollActual;
+float eulerPitchActual;
+float eulerYawActual;
 
 float eulerRollDesired;
 float eulerPitchDesired;
 float eulerYawDesired;
 //期望高度
 uint8_t HightDesired;
-
 
 static float rollRateDesired;
 static float pitchRateDesired;
@@ -80,10 +79,10 @@ static float aslLong; // long term asl
 
 // Altitude hold variables
 PidObject altHoldPID; // Used for altitute hold mode. I gets reset when the bat status changes
-bool altHold = false;          // Currently in altitude hold mode
+bool altHold    = false;      // Currently in altitude hold mode
 bool setAltHold = false;      // Hover mode has just been activated
 float accWZ     = 0.0;
-static float accMAG    = 0.0;
+float accMAG    = 0.0;
 float vSpeedASL = 0.0;
 float vSpeedAcc = 0.0;
 static float vSpeed    = 0.0; // Vertical speed (world frame) integrated from vertical acceleration
@@ -118,7 +117,6 @@ RPYType rollType;
 RPYType pitchType;
 RPYType yawType;
 
-
 uint16_t actuatorThrust;
 
 int16_t  actuatorRoll;
@@ -138,7 +136,6 @@ static void distributePower(const uint16_t thrust, const int16_t roll,
 static uint16_t limitThrust(int32_t value);
 //TASK FUNCTION
 static void stabilizerTask(void* param);
-//static void StationLinkTask(void* param);
 
 static float constrain(float value, const float minVal, const float maxVal);
 static float deadband(float value, const float threshold);
@@ -147,31 +144,25 @@ void stabilizerInit(void)
 {
   if(isInit)
     return;
-  motorsInit();
-  imu6Init();
-  sensfusion6Init();
+  
+  HardwarePeripheralInit();
+  IMU_Init();
   controllerInit();
 
   rollRateDesired  = 0;
   pitchRateDesired = 0;
   yawRateDesired = 0;
 
-  xTaskCreate(stabilizerTask, ( signed portCHAR* )"STABILIZER",
+  xTaskCreate(stabilizerTask, (  portCHAR* )"STABILIZER",
               2*configMINIMAL_STACK_SIZE, NULL, /*Piority*/2, NULL);
-	
-//	xTaskCreate(StationLinkTask,( signed portCHAR* )"StationLink",
-//              2*configMINIMAL_STACK_SIZE, NULL, /*Piority*/2, NULL);
-
+  
   isInit = true;
 }
 
 bool stabilizerTest(void)
 {
   bool pass = true;
-
-  pass &= motorsTest();
-  pass &= imu6Test();
-  pass &= sensfusion6Test();
+  
   pass &= controllerTest();
 
   return pass;
@@ -193,16 +184,11 @@ static void stabilizerTask(void* param)
   for(;;)
   {
 		
-    vTaskDelayUntil((portTickType *)&lastWakeTime,F2T(IMU_UPDATE_FREQ));//// 500Hz 
+    vTaskDelayUntil((portTickType *)&lastWakeTime,pdMS_TO_TICKS(2));//// 500Hz 
 
     // Magnetometer not yet used more then for logging.
-		//imu9Read(&gyro, &acc, &mag);
-	//taskENTER_CRITICAL();
-	//nrfSetEnable(false);
+	//imu9Read(&gyro, &acc, &mag);
     imu6Read(&gyro,&acc);
-	//nrfSetEnable(true);
-	//taskEXIT_CRITICAL();
-		//Stm32QdcptLedToggle(LEDL);
     if (imu6IsCalibrated())//判断传感器是否校准完成
     {
 			//获取遥控器的期望欧拉角
