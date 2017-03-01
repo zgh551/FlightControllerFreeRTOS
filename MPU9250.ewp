@@ -2898,6 +2898,12 @@
   <group>
     <name>Algorithm</name>
     <file>
+      <name>$PROJ_DIR$\Algorithm\src\EulerAngle.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Algorithm\src\filter.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\Algorithm\src\MadgwickAHRS.c</name>
       <excluded>
         <configuration>Debug</configuration>

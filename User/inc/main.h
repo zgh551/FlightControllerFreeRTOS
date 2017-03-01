@@ -32,6 +32,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdbool.h>
+#include <math.h>
 #include "stm32f4xx.h"
 #include "BoardDefine.h"
 
@@ -66,10 +67,12 @@
 
 /*HAL = Hardware Aplication Level*/
 #include "IMU.h"
-
+#include "imu_types.h"
+    
 /*Algorithm*/
 #include "MahonyAHRS.h"
-
+#include "EulerAngle.h"
+#include "filter.h"   
 /*Cintrol*/
 #include "pid.h"
 #include "pidctrl.h" 

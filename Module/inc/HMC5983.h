@@ -84,6 +84,7 @@ bool HMC5983_TestConnection( void );
 void HMC5983_Configure(void);
 void HMC5983_GetData( int16_t *dataIMU );
 void HMC5983_GetFloatData( float *dataIMU );
+void HMC5983GetTreeAxisData( int16_t *mx,int16_t *my,int16_t *mz );
 void MagCorrect( float *dataIMU , float *CorrectDataIMU );
 void MagCorrectOffset( float *dataIMU , float *CorrectDataIMU );
 void HMC5983_SendData(float *dat);

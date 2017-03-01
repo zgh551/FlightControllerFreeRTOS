@@ -6,7 +6,6 @@ extern "C" {
 
 #include "main.h"
 
-typedef struct _Axis3f Axis3f;
 #define ICM20601_SELF_TEST_XG           ((uint8_t)0x00)
 #define ICM20601_SELF_TEST_YG           ((uint8_t)0x01)
 #define ICM20601_SELF_TEST_ZG           ((uint8_t)0x02)
@@ -61,15 +60,25 @@ typedef struct _Axis3f Axis3f;
 #define ICM20601_ZA_OFFSET_H            ((uint8_t)0x7D)  
 #define ICM20601_ZA_OFFSET_L            ((uint8_t)0x7E)
   
+#define ICM20602_DEG_PER_LSB_250  (float)((2 * 250.0)  / 65536.0f)
+#define ICM20602_DEG_PER_LSB_500  (float)((2 * 500.0)  / 65536.0f)
+#define ICM20602_DEG_PER_LSB_1000 (float)((2 * 1000.0) / 65536.0f)
+#define ICM20602_DEG_PER_LSB_2000 (float)((2 * 2000.0) / 65536.0f)
+
+#define ICM20602_G_PER_LSB_2      (float)((2 * 2)  / 65536.0f)
+#define ICM20602_G_PER_LSB_4      (float)((2 * 4)  / 65536.0f)
+#define ICM20602_G_PER_LSB_8      (float)((2 * 8)  / 65536.0f)
+#define ICM20602_G_PER_LSB_16     (float)((2 * 16) / 65536.0f)  
+  
 void ICM20601_WriteReg( uint8_t writeAddr, uint8_t writeData );
 uint8_t ICM20601_ReadReg( uint8_t readAddr );
-void ICM20601_WriteRegs(uint8_t writeAddr, uint8_t *writeData, uint8_t lens);
-void ICM20601_ReadRegs(uint8_t readAddr, uint8_t *readData, uint8_t lens);
+void ICM20601_WriteRegs( uint8_t writeAddr, uint8_t *writeData, uint8_t lens );
+void ICM20601_ReadRegs( uint8_t readAddr, uint8_t *readData, uint8_t lens );
 
-void ICM20601_Init(void);
-bool ICM20601_TestConnection(void);
+void ICM20601_Init( void );
+bool ICM20601_TestConnection( void );
 void ICM20601_GetFloatData( float *dataIMU );
-void ICM20601_GetData( Axis3f *gyro,Axis3f *acc );
+void ICM20601GetSixAxisData( int16_t *ax,int16_t *ay,int16_t *az,int16_t *gx,int16_t *gy,int16_t *gz );
 #ifdef __cplusplus
 }
 #endif

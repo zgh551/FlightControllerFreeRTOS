@@ -6,13 +6,9 @@ extern "C" {
 #endif
 
 #include "main.h"
-
+#include "BoardDefineType.h"
+  
 ///****LED Define ****/
-typedef enum _Led_TypeDef
-{
-  LEDL=0,
-  LEDR
-}Led_TypeDef;
 
 #define  ON     1
 #define  OFF    0

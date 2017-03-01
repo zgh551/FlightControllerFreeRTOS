@@ -67,19 +67,20 @@ void ICM20601_GetFloatData( float *dataIMU )
   dataIMU[6] = (float)((Byte16(int16_t, tmpRead[12], tmpRead[13]))/16.4f);//Gyr.Z 
 }
 
-void ICM20601_GetData( Axis3f *gyro,Axis3f *acc )
+void ICM20601GetSixAxisData(int16_t *ax,int16_t *ay,int16_t *az,int16_t *gx,int16_t *gy,int16_t *gz)
 {
   uint8_t tmpRead[14];
 
   ICM20601_ReadRegs(ICM20601_ACCEL_XOUT_H, tmpRead, 14);
 
-  acc->x  = (float)((Byte16(int16_t, tmpRead[0],  tmpRead[1])) /2048.0f);// Acc.X
-  acc->y  = (float)((Byte16(int16_t, tmpRead[2],  tmpRead[3])) /2048.0f);// Acc.Y
-  acc->z  = (float)((Byte16(int16_t, tmpRead[4],  tmpRead[5])) /2048.0f);// Acc.Z
-  gyro->x = (float)((Byte16(int16_t, tmpRead[8],  tmpRead[9])) /16.4f);//Gyr.X
-  gyro->y = (float)((Byte16(int16_t, tmpRead[10], tmpRead[11]))/16.4f);//Gyr.Y
-  gyro->z = (float)((Byte16(int16_t, tmpRead[12], tmpRead[13]))/16.4f);//Gyr.Z 
+  *ax  = Byte16(int16_t, tmpRead[0],  tmpRead[1]) ;// Acc.X /2048.0f
+  *ay  = Byte16(int16_t, tmpRead[2],  tmpRead[3]) ;// Acc.Y /2048.0f
+  *az  = Byte16(int16_t, tmpRead[4],  tmpRead[5]) ;// Acc.Z /2048.0f
+  *gx  = Byte16(int16_t, tmpRead[8],  tmpRead[9]) ;// Gyr.X /16.4f
+  *gy  = Byte16(int16_t, tmpRead[10], tmpRead[11]);// Gyr.Y /16.4f 
+  *gz  = Byte16(int16_t, tmpRead[12], tmpRead[13]);// Gyr.Z /16.4f 
 }
+
 static void ICM20601_Offset_Correct(void)
 {
 

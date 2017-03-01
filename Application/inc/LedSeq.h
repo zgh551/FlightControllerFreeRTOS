@@ -5,9 +5,9 @@ extern "C" {
 #endif
 
 #include "main.h"
-  
+#include "BoardDefineType.h"  
 /****LED Define ****/
-typedef enum _Led_TypeDef Led_TypeDef;  
+//typedef enum _Led_TypeDef Led_TypeDef;  
 
 #define LEDSEQ_CHARGE_CYCLE_TIME  1000
 //Led sequence action

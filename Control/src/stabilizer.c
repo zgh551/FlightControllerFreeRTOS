@@ -198,13 +198,12 @@ static void stabilizerTask(void* param)
       // 250HZ
       if (++attitudeCounter >= ATTITUDE_UPDATE_RATE_DIVIDER)
       {
-				//Stm32QdcptLedToggle(LEDR);
-				//四元素更新
+		//四元素更新
         sensfusion6UpdateQ(gyro.x, gyro.y, gyro.z, acc.x, acc.y, acc.z, FUSION_UPDATE_DT);
-				//计算实际的欧拉角
+		//计算实际的欧拉角
         sensfusion6GetEulerRPY(&eulerRollActual, &eulerPitchActual, &eulerYawActual);
 				
-				//返回在没有重力加速度下的垂直加速度
+		//返回在没有重力加速度下的垂直加速度
         accWZ = sensfusion6GetAccZWithoutGravity(acc.x, acc.y, acc.z)-0.13;
 				
         accMAG = (acc.x*acc.x) + (acc.y*acc.y) + (acc.z*acc.z) ;
