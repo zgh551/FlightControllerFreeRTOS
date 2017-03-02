@@ -56,10 +56,6 @@ static uint8_t    imuAccLpfAttFactor;
 static bool       isHmc5983lPresent;
 static bool       isMs5611Present;
 
-//static bool isMpu6050TestPassed;
-//static bool isHmc5883lTestPassed;
-//static bool isMs5611TestPassed;
-
 //Pre-calculated values for accelerometer alignment
 static float cosPitch;
 static float sinPitch;
@@ -138,14 +134,18 @@ void IMU_Init(void)
   varianceSampleTime = -GYRO_MIN_BIAS_TIMEOUT_MS + 1;
   imuAccLpfAttFactor = IMU_ACC_IIR_LPF_ATT_FACTOR;
   
-  cosPitch = cos(configblockGetCalibPitch() * M_PI/180);
-  sinPitch = sin(configblockGetCalibPitch() * M_PI/180);
-  cosRoll  = cos(configblockGetCalibRoll() * M_PI/180);
-  sinRoll  = sin(configblockGetCalibRoll() * M_PI/180);
+  cosPitch = 1.0f;//cos(configblockGetCalibPitch() * M_PI/180);
+  sinPitch = 0.0f;//sin(configblockGetCalibPitch() * M_PI/180);
+  cosRoll  = 1.0f;//cos(configblockGetCalibRoll() * M_PI/180);
+  sinRoll  = 0.0f;//sin(configblockGetCalibRoll() * M_PI/180);
 
   isInit = true;
 }
 
+bool IMU_Test(void)
+{
+  return isInit;
+}
 
 void imu6Read(Axis3f *gyro,Axis3f *acc)
 {
@@ -187,9 +187,9 @@ void imu6Read(Axis3f *gyro,Axis3f *acc)
   imuAccAlignToGravity(&accelLPF, &accelLPFAligned);
 
   // Re-map outputs
-  gyro->x = -(gyroMpu.x - gyroBias.bias.x) * IMU_DEG_PER_LSB_CFG;
-  gyro->y =  (gyroMpu.y - gyroBias.bias.y) * IMU_DEG_PER_LSB_CFG;
-  gyro->z =  (gyroMpu.z - gyroBias.bias.z) * IMU_DEG_PER_LSB_CFG;
+  gyro->x = -(gyroMpu.x - gyroBias.bias.x) * IMU_DEG_PER_LSB_CFG*M_PI/180.0f;
+  gyro->y =  (gyroMpu.y - gyroBias.bias.y) * IMU_DEG_PER_LSB_CFG*M_PI/180.0f;
+  gyro->z =  (gyroMpu.z - gyroBias.bias.z) * IMU_DEG_PER_LSB_CFG*M_PI/180.0f;
 #ifdef IMU_TAKE_ACCEL_BIAS
   acc->x = (accelLPFAligned.x - accelBias.bias.x) * IMU_G_PER_LSB_CFG;
   acc->y = (accelLPFAligned.y - accelBias.bias.y) * IMU_G_PER_LSB_CFG;
@@ -227,7 +227,6 @@ void imu9Read(Axis3f *gyro,Axis3f *acc,Axis3f *mag)
     mag->y = 0;
     mag->z = 0;
   }
-
 }
 
 bool imuHasBarometer(void)

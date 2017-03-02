@@ -4,8 +4,7 @@
 extern "C" {
 #endif
 #include "main.h"
-
-typedef struct _CRTPPacket CRTPPacket;
+#include "CRTP_Type.h"
 
 /*************************************************************************
  *@brief  initialize the radio 

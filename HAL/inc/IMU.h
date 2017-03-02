@@ -49,7 +49,11 @@ extern "C" {
    
 /* Exported function prototypes ----------------------------------------------*/
 void IMU_Init(void); 
+bool IMU_Test(void);
 void imu6Read(Axis3f *gyro,Axis3f *acc);
+bool imu6IsCalibrated(void);
+bool imuHasBarometer(void);
+bool imuHasMangnetometer(void);
 void imu9Read(Axis3f *gyro,Axis3f *acc,Axis3f *mag);
 
 #ifdef __cplusplus

@@ -5,7 +5,8 @@ extern "C" {
 #endif
 
 #include "main.h"
-
+#include "BoardDefineType.h"  
+  
 #define COMMANDER_WDT_TIMEOUT_STABALIZE  pdMS_TO_TICKS(500)
 #define COMMANDER_WDT_TIMEOUT_SHUTDOWN   pdMS_TO_TICKS(800)
   

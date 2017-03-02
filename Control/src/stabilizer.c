@@ -101,7 +101,7 @@ static float pidAslFac              = 13000; // relates meters asl to thrust
 static float pidAlpha               = 0.8;   // PID Smoothing //TODO: shouldnt need to do this
 static float vSpeedASLFac           = 0;    // multiplier
 static float vSpeedAccFac           = 0;  // multiplier -48
-static float vAccDeadband           = 0.05;  // Vertical acceleration deadband  0.05
+static float vAccDeadband           = 0.15;  // Vertical acceleration deadband  0.05
 static float vSpeedASLDeadband      = 0.005; // Vertical speed based on barometer readings deadband
 static float vSpeedLimit            = 10;  // used to constrain vertical velocity
 static float errDeadband            = 0.00;  // error (target - altitude) deadband
@@ -132,7 +132,7 @@ static bool isInit= false;
 
 static void stabilizerAltHoldUpdate(void);
 static void distributePower(const uint16_t thrust, const int16_t roll,
-                            const int16_t pitch, const int16_t yaw);
+                             const int16_t pitch, const int16_t yaw);
 static uint16_t limitThrust(int32_t value);
 //TASK FUNCTION
 static void stabilizerTask(void* param);
@@ -162,7 +162,7 @@ void stabilizerInit(void)
 bool stabilizerTest(void)
 {
   bool pass = true;
-  
+  pass &= IMU_Test();
   pass &= controllerTest();
 
   return pass;
@@ -170,8 +170,6 @@ bool stabilizerTest(void)
 
 static void stabilizerTask(void* param)
 {
-
-	
   uint32_t lastWakeTime;
 
   vTaskSetApplicationTaskTag(0, (pdTASK_HOOK_CODE)TASK_STABILIZER_ID_NBR);
@@ -199,12 +197,12 @@ static void stabilizerTask(void* param)
       if (++attitudeCounter >= ATTITUDE_UPDATE_RATE_DIVIDER)
       {
 		//四元素更新
-        sensfusion6UpdateQ(gyro.x, gyro.y, gyro.z, acc.x, acc.y, acc.z, FUSION_UPDATE_DT);
+        MahonyAHRSupdateIMU(gyro.x, gyro.y, gyro.z, acc.x, acc.y, acc.z);
 		//计算实际的欧拉角
         sensfusion6GetEulerRPY(&eulerRollActual, &eulerPitchActual, &eulerYawActual);
 				
 		//返回在没有重力加速度下的垂直加速度
-        accWZ = sensfusion6GetAccZWithoutGravity(acc.x, acc.y, acc.z)-0.13;
+        accWZ = sensfusion6GetAccZWithoutGravity(acc.x, acc.y, acc.z);
 				
         accMAG = (acc.x*acc.x) + (acc.y*acc.y) + (acc.z*acc.z) ;
         // Estimate speed from acc (drifts)
@@ -216,11 +214,11 @@ static void stabilizerTask(void* param)
         attitudeCounter = 0;				
       }
 			
-			if(cnt++>100)
-			{	
-				Stm32QdcptLedToggle(LEDR);
-				cnt = 0;
-			}
+      if(cnt++>100)
+      {	
+          Stm32QdcptLedToggle(LEDR);
+          cnt = 0;
+      }
 
       // 100HZ 如果有气压计
       if (imuHasBarometer() && (++altHoldCounter >= ALTHOLD_UPDATE_RATE_DIVIDER))//100hz进入一次
