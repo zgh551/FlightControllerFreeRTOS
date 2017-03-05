@@ -1,2 +1,2 @@
-rd /Q /S Debug\Obj
+rd /Q /S Debug
 
