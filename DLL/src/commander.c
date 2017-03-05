@@ -3,17 +3,15 @@
 #define MIN_THRUST  0       //10000
 #define MAX_THRUST  65500
 
-typedef enum _Led_TypeDef Led_TypeDef;
-
 struct CommanderCrtpValues
 {
   uint16_t thrust;// 
   int8_t roll;    // 
   int8_t pitch;   //
   int8_t yaw;     //      
-}__packed;
+};
 
-static struct CommanderCrtpValues targetVal[2];
+static struct CommanderCrtpValues __packed targetVal[2];
 //static struct CommanderCrtpValues ActualVal[2];
 
 static bool isInit;

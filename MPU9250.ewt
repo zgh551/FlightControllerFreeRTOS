@@ -3473,6 +3473,12 @@
   <group>
     <name>Algorithm</name>
     <file>
+      <name>$PROJ_DIR$\Algorithm\src\EulerAngle.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Algorithm\src\filter.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\Algorithm\src\MadgwickAHRS.c</name>
     </file>
     <file>
@@ -3492,6 +3498,21 @@
     <name>CMSIS</name>
     <file>
       <name>$PROJ_DIR$\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c</name>
+    </file>
+  </group>
+  <group>
+    <name>Control</name>
+    <file>
+      <name>$PROJ_DIR$\Control\src\controller.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\pid.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\pidctrl.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\stabilizer.c</name>
     </file>
   </group>
   <group>
@@ -3617,13 +3638,13 @@
       <name>$PROJ_DIR$\Module\src\ICM20601.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\Module\src\motors.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\Module\src\MPU9250.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\Module\src\nRF24L01.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Module\src\PPM_Encode.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\Module\src\sdio_sd.c</name>

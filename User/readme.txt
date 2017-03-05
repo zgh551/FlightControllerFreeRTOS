@@ -93,7 +93,9 @@ In order to make the program work, you must do the following:
  
  Task Name        Piority
  systemTask         2
- RadioTask          3
+ RadioTask          2
  crtpTxTask         2
  crtpRxTask         2
+ 
+ pidCrtlTask        2
  

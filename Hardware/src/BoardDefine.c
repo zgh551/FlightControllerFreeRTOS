@@ -291,85 +291,85 @@ void Tim1Configure(void)
   * @param  None
   * @retval None
   */
-static void PPM_GPIO_Config(void)
-{
-  GPIO_InitTypeDef GPIO_InitStructure;
+//static void PPM_GPIO_Config(void)
+//{
+//  GPIO_InitTypeDef GPIO_InitStructure;
+//
+//
+//  /* GPIOA, GPIOB and GPIOE Clocks enable */
+//  RCC_AHB1PeriphClockCmd( PPM1_GPIO_CLK | PPM2_GPIO_CLK | PPM3_GPIO_CLK |PPM4_GPIO_CLK , ENABLE);
+//  
+//  /* GPIOD Configuration: Channel 1,2,3,4 as alternate function push-pull */
+//  GPIO_InitStructure.GPIO_Pin = PPM1_PIN | PPM2_PIN | PPM3_PIN | PPM4_PIN;
+//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+//  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+//  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+//  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;
+//  GPIO_Init(PPM1_GPIO_PORT, &GPIO_InitStructure);
+//  
+//  GPIO_PinAFConfig(PPM1_GPIO_PORT, PPM1_SOURCE, PPM1_AF);
+//  GPIO_PinAFConfig(PPM2_GPIO_PORT, PPM2_SOURCE, PPM2_AF);
+//  GPIO_PinAFConfig(PPM3_GPIO_PORT, PPM3_SOURCE, PPM3_AF);
+//  GPIO_PinAFConfig(PPM4_GPIO_PORT, PPM4_SOURCE, PPM4_AF);  
+//}
 
-
-  /* GPIOA, GPIOB and GPIOE Clocks enable */
-  RCC_AHB1PeriphClockCmd( PPM1_GPIO_CLK | PPM2_GPIO_CLK | PPM3_GPIO_CLK |PPM4_GPIO_CLK , ENABLE);
-  
-  /* GPIOD Configuration: Channel 1,2,3,4 as alternate function push-pull */
-  GPIO_InitStructure.GPIO_Pin = PPM1_PIN | PPM2_PIN | PPM3_PIN | PPM4_PIN;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;
-  GPIO_Init(PPM1_GPIO_PORT, &GPIO_InitStructure);
-  
-  GPIO_PinAFConfig(PPM1_GPIO_PORT, PPM1_SOURCE, PPM1_AF);
-  GPIO_PinAFConfig(PPM2_GPIO_PORT, PPM2_SOURCE, PPM2_AF);
-  GPIO_PinAFConfig(PPM3_GPIO_PORT, PPM3_SOURCE, PPM3_AF);
-  GPIO_PinAFConfig(PPM4_GPIO_PORT, PPM4_SOURCE, PPM4_AF);  
-}
-
-static void PPM_TIM_Config(void)
-{
-  TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-  TIM_OCInitTypeDef  TIM_OCInitStructure;
-  uint16_t TimerPeriod = 0;
-  uint16_t Channel1Pulse = 0, Channel2Pulse = 0, Channel3Pulse = 0, Channel4Pulse = 0;
-
-  /* TIM4 clock enable */
-  RCC_APB1PeriphClockCmd(PPM_TIM_CLK , ENABLE);
-  
-  /* Compute the value to be set in ARR register to generate signal frequency at 50hz */
-  TimerPeriod = (1000000 / 50 ) - 1;//19999
-  /* Compute CCR1 value to generate a duty cycle at 5% for channel 1 and 1N */
-  Channel1Pulse = (uint16_t) (((uint32_t) 5 * (TimerPeriod - 1)) / 100);
-  /* Compute CCR2 value to generate a duty cycle at 5%  for channel 2 and 2N */
-  Channel2Pulse = (uint16_t) (((uint32_t) 5 * (TimerPeriod - 1)) / 100);
-  /* Compute CCR3 value to generate a duty cycle at 5%  for channel 3 and 3N */
-  Channel3Pulse = (uint16_t) (((uint32_t) 5 * (TimerPeriod - 1)) / 100);
-  /* Compute CCR4 value to generate a duty cycle at 5%  for channel 4 */
-  Channel4Pulse = (uint16_t) (((uint32_t) 5 * (TimerPeriod- 1)) / 100);
-  
-  /* Time Base configuration */
-  TIM_TimeBaseStructure.TIM_Prescaler = 90;//1MHZ
-  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-  TIM_TimeBaseStructure.TIM_Period = TimerPeriod;
-  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
-
-  TIM_TimeBaseInit(PPM_TIM, &TIM_TimeBaseStructure);
-  
-  /* Channel 1, 2,3 and 4 Configuration in PWM mode */
-  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-  TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable;
-  TIM_OCInitStructure.TIM_Pulse = Channel1Pulse;
-  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
-  TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;
-  TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Set;
-  TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Reset;
-
-  TIM_OC1Init(PPM_TIM, &TIM_OCInitStructure);
-
-  TIM_OCInitStructure.TIM_Pulse = Channel2Pulse;
-  TIM_OC2Init(PPM_TIM, &TIM_OCInitStructure);
-
-  TIM_OCInitStructure.TIM_Pulse = Channel3Pulse;
-  TIM_OC3Init(PPM_TIM, &TIM_OCInitStructure);
-
-  TIM_OCInitStructure.TIM_Pulse = Channel4Pulse;
-  TIM_OC4Init(PPM_TIM, &TIM_OCInitStructure);
-
-  /* TIM1 counter enable */
-  TIM_Cmd(PPM_TIM, ENABLE);
-
-  /* TIM1 Main Output Enable */
-  TIM_CtrlPWMOutputs(PPM_TIM, ENABLE);
-}
+//static void PPM_TIM_Config(void)
+//{
+//  TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+//  TIM_OCInitTypeDef  TIM_OCInitStructure;
+//  uint16_t TimerPeriod = 0;
+//  uint16_t Channel1Pulse = 0, Channel2Pulse = 0, Channel3Pulse = 0, Channel4Pulse = 0;
+//
+//  /* TIM4 clock enable */
+//  RCC_APB1PeriphClockCmd(PPM_TIM_CLK , ENABLE);
+//  
+//  /* Compute the value to be set in ARR register to generate signal frequency at 50hz */
+//  TimerPeriod = (1000000 / 50 ) - 1;//19999
+//  /* Compute CCR1 value to generate a duty cycle at 5% for channel 1 and 1N */
+//  Channel1Pulse = (uint16_t) (((uint32_t) 5 * (TimerPeriod - 1)) / 100);
+//  /* Compute CCR2 value to generate a duty cycle at 5%  for channel 2 and 2N */
+//  Channel2Pulse = (uint16_t) (((uint32_t) 5 * (TimerPeriod - 1)) / 100);
+//  /* Compute CCR3 value to generate a duty cycle at 5%  for channel 3 and 3N */
+//  Channel3Pulse = (uint16_t) (((uint32_t) 5 * (TimerPeriod - 1)) / 100);
+//  /* Compute CCR4 value to generate a duty cycle at 5%  for channel 4 */
+//  Channel4Pulse = (uint16_t) (((uint32_t) 5 * (TimerPeriod- 1)) / 100);
+//  
+//  /* Time Base configuration */
+//  TIM_TimeBaseStructure.TIM_Prescaler = 90;//1MHZ
+//  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+//  TIM_TimeBaseStructure.TIM_Period = TimerPeriod;
+//  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+//  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+//
+//  TIM_TimeBaseInit(PPM_TIM, &TIM_TimeBaseStructure);
+//  
+//  /* Channel 1, 2,3 and 4 Configuration in PWM mode */
+//  TIM_OCInitStructure.TIM_OCMode        = TIM_OCMode_PWM2;
+//  TIM_OCInitStructure.TIM_OutputState   = TIM_OutputState_Enable;
+//  TIM_OCInitStructure.TIM_OutputNState  = TIM_OutputNState_Enable;
+//  TIM_OCInitStructure.TIM_Pulse         = Channel1Pulse;
+//  TIM_OCInitStructure.TIM_OCPolarity    = TIM_OCPolarity_Low;
+//  TIM_OCInitStructure.TIM_OCNPolarity   = TIM_OCNPolarity_High;
+//  TIM_OCInitStructure.TIM_OCIdleState   = TIM_OCIdleState_Set;
+//  TIM_OCInitStructure.TIM_OCNIdleState  = TIM_OCIdleState_Reset;
+//
+//  TIM_OC1Init(PPM_TIM, &TIM_OCInitStructure);
+//
+//  TIM_OCInitStructure.TIM_Pulse = Channel2Pulse;
+//  TIM_OC2Init(PPM_TIM, &TIM_OCInitStructure);
+//
+//  TIM_OCInitStructure.TIM_Pulse = Channel3Pulse;
+//  TIM_OC3Init(PPM_TIM, &TIM_OCInitStructure);
+//
+//  TIM_OCInitStructure.TIM_Pulse = Channel4Pulse;
+//  TIM_OC4Init(PPM_TIM, &TIM_OCInitStructure);
+//
+//  /* TIM1 counter enable */
+//  TIM_Cmd(PPM_TIM, ENABLE);
+//
+//  /* TIM1 Main Output Enable */
+//  TIM_CtrlPWMOutputs(PPM_TIM, ENABLE);
+//}
 
 /**
   * @brief  DeInitializes the SDIO interface.

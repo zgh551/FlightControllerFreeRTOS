@@ -134,6 +134,20 @@ void HMC5983_GetFloatData( float *dataIMU )
   }
 }
 
+void HMC5983GetTreeAxisData( int16_t *mx,int16_t *my,int16_t *mz )
+{
+  uint8_t temp_data[6];
+  uint8_t status;
+  status = HMC5983_ReadReg(SR);
+  if(status & 0x01)
+  {
+    HMC5983_ReadRegs(DOMR_X,temp_data,6);
+    *mx = Byte16(int16_t, temp_data[0],  temp_data[1]);  //MAG.X*0.00152 
+    *my = Byte16(int16_t, temp_data[4],  temp_data[5]);  //MAG.Y*0.00152 
+    *mz = Byte16(int16_t, temp_data[2],  temp_data[3]);  //MAG.Z*0.00152 
+  }
+}
+
 void MagCorrect( float *dataIMU , float *CorrectDataIMU )
 {
   float temp[3];
