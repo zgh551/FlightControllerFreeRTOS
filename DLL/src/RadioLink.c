@@ -22,8 +22,6 @@ typedef union
   } __packed raw;
 } RadioPacket;
 
-RadioPacket pk;
-
 static struct {
  bool enabled;
 }state;
@@ -40,7 +38,7 @@ enum {
 #define TX_PLOAD_WIDTH  32
 
 uint8_t myrxtest[32]={0};
-unsigned char dataLen;
+
 uint8_t reg_state;
 
 /**************************************************
@@ -64,9 +62,11 @@ int radioSendPacket(CRTPPacket * pk)
 {
   if (!state.enabled)
     return 1;
-  xQueueSend(txQueue, pk, portMAX_DELAY);//111portMAX_DELAY
+  if (xQueueSend(txQueue, pk, portMAX_DELAY) == pdTRUE){
+    return true;
+  }
 
-  return 0;
+  return false;
 }
 
 /*********************************************************************************************
@@ -125,6 +125,8 @@ static struct crtpLinkOperations radioOp =
  *******************************************************************************************/
 static void RadioTask(void * arg)
 {
+  RadioPacket pk;
+  uint8_t dataLen;
 //  LastPacketTick = xTaskGetTickCount();
   //Packets handling loop
 //  xSemaphoreTake( dataRdy, 0 );
@@ -135,7 +137,7 @@ static void RadioTask(void * arg)
 //    vTaskDelayUntil((portTickType *)&LastPacketTick,pdMS_TO_TICKS(30));//20ms 
 //    EXTI_GenerateSWInterrupt(nRF24L01_SPI_IRQ_LINE);
     xSemaphoreTake(dataRdy, portMAX_DELAY);//interrupt way
-//    LastPacketTick = xTaskGetTickCount();
+    LastPacketTick = xTaskGetTickCount();
 //    reg_state = nrfReadReg(REG_RPD);//
 //    reg_state = nrfReadReg(REG_STATUS); //REG_FIFO_STATUS nrfReadReg(REG_FIFO_STATUS)&0x02
 //    if(reg_state&0x40)
@@ -152,6 +154,7 @@ static void RadioTask(void * arg)
           //Fetch the data
           pk.raw.size = dataLen-1;//-->crtp one is flag other is data
           nrfRxPayload((uint8_t*)pk.raw.data,dataLen);//read the RX payload 
+          if(!CRTP_IS_NULL_PACKET(pk.crtp))
           xQueueSend(rxQueue, &pk, 0);
         }
       }
@@ -230,28 +233,22 @@ static void radiolinkInitNRF24L01P(uint8_t modle)
           nrfWriteReg(REG_CONFIG, 0x0E);
           break;
       case RX_2:
-          //Flush RX
-          for(i=0;i<3;i++)
-          nrfFlushRx();
-          //Flush TX
-          for(i=0;i<3;i++)
-          nrfFlushTx();
           //Power the radio, Enable the RX_RD AND MAX_RT interruption, set the radio in PRX mode
           nrfWriteReg(REG_CONFIG, 0x0F);//2015.7.9
+          vTaskDelay( pdMS_TO_TICKS( 2 ) );
           //active the regist
           nrfActivate();
           // Enable the dynamic payload size and the ack payload for the pipe 0
           nrfWriteReg(REG_DYNPD,   0x01);
           nrfWriteReg(REG_FEATURE, 0x06);
-          
-          break;
-      case TX_2:
           //Flush RX
           for(i=0;i<3;i++)
           nrfFlushRx();
           //Flush TX
           for(i=0;i<3;i++)
           nrfFlushTx();
+          break;
+      case TX_2:
           //Power the radio, Enable the TX_DS AND MAX_RT interruption, set the radio in PRX mode
           nrfWriteReg(REG_CONFIG, 0x0E);
           //active the regist
@@ -259,7 +256,12 @@ static void radiolinkInitNRF24L01P(uint8_t modle)
           // Enable the dynamic payload size and the ack payload for the pipe 0
           nrfWriteReg(REG_DYNPD,   0x01);
           nrfWriteReg(REG_FEATURE, 0x06);
-          
+          //Flush RX
+          for(i=0;i<3;i++)
+          nrfFlushRx();
+          //Flush TX
+          for(i=0;i<3;i++)
+          nrfFlushTx();
           break;
           default:
           
@@ -330,8 +332,9 @@ void radiolinkInit(void)
   //init the nrf24l01
   radiolinkInitNRF24L01P(RX_2);	//6.24
   // Launch the Radio link task 		
-  xTaskCreate(RadioTask,(  char* )"RadioTask",
-			configMINIMAL_STACK_SIZE,NULL, /*priority*/2, NULL);
+  xTaskCreate(RadioTask,NRF24LINK_TASK_NAME,
+			  NRF24LINK_TASK_STACKSIZE, NULL, 
+              NRF24LINK_TASK_PRI, NULL);
   isInit = true;
 }
 

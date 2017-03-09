@@ -1,211 +1,322 @@
 #include "commander.h"
 
-#define MIN_THRUST  0       //10000
-#define MAX_THRUST  65500
+#define MIN_THRUST  1000
+#define MAX_THRUST  60000
 
-struct CommanderCrtpValues
+/**
+ * Commander control data
+ */
+typedef struct
 {
-  uint16_t thrust;// 
-  int8_t roll;    // 
-  int8_t pitch;   //
-  int8_t yaw;     //      
-};
+  CommanderCrtpValues targetVal[2];
+  bool activeSide;
+  uint32_t timestamp; // FreeRTOS ticks
+} CommanderCache;
 
-static struct CommanderCrtpValues __packed targetVal[2];
-//static struct CommanderCrtpValues ActualVal[2];
+/**
+ * Stabilization modes for Roll, Pitch, Yaw.
+ */
+typedef enum
+{
+  RATE    = 0,
+  ANGLE   = 1,
+} RPYType;
+
+/**
+ * Yaw flight Modes
+ */
+typedef enum
+{
+  CAREFREE  = 0, // Yaw is locked to world coordinates thus heading stays the same when yaw rotates
+  PLUSMODE  = 1, // Plus-mode. Motor M1 is defined as front
+  XMODE     = 2, // X-mode. M1 & M4 are defined as front
+} YawModeType;
 
 static bool isInit;
-static int  side=0;
+static CommanderCache crtpCache;
+static CommanderCache extrxCache;
+static CommanderCache* activeCache;
+
 static uint32_t lastUpdate;
+//static bool isInactive;
+static bool thrustLocked;
+static bool altHoldMode = false;
+static bool posHoldMode = false;
 
-static bool altHoldMode    = false;
-static bool altHoldModeOld = false;
+static RPYType stabilizationModeRoll  = ANGLE; // Current stabilization type of roll (rate or angle)
+static RPYType stabilizationModePitch = ANGLE; // Current stabilization type of pitch (rate or angle)
+//static RPYType stabilizationModeYaw   = RATE;  // Current stabilization type of yaw (rate or angle)
 
-static void mydebugCrtpCB(CRTPPacket* pk);
+static YawModeType yawMode = DEFAULT_YAW_MODE; // Yaw mode configuration
+static bool carefreeResetFront;             // Reset what is front in carefree mode
+
 static void commanderCrtpCB(CRTPPacket* pk);
-static void paramCrtpCB(CRTPPacket* pk);
+static void commanderCacheSelectorUpdate(void);
 
-static void commanderWatchdogReset(void);
+/* Private functions */
+static void commanderSetActiveThrust(uint16_t thrust)
+{
+  activeCache->targetVal[activeCache->activeSide].thrust = thrust;
+}
 
+static void commanderSetActiveRoll(float roll)
+{
+  activeCache->targetVal[activeCache->activeSide].roll = roll;
+}
+
+static void commanderSetActivePitch(float pitch)
+{
+  activeCache->targetVal[activeCache->activeSide].pitch = pitch;
+}
+
+static void commanderSetActiveYaw(float yaw)
+{
+  activeCache->targetVal[activeCache->activeSide].yaw = yaw;
+}
+
+static uint16_t commanderGetActiveThrust(void)
+{
+  commanderCacheSelectorUpdate();
+  return activeCache->targetVal[activeCache->activeSide].thrust;
+}
+
+static float commanderGetActiveRoll(void)
+{
+  return activeCache->targetVal[activeCache->activeSide].roll;
+}
+
+static float commanderGetActivePitch(void)
+{
+  return activeCache->targetVal[activeCache->activeSide].pitch;
+}
+
+static float commanderGetActiveYaw(void)
+{
+  return activeCache->targetVal[activeCache->activeSide].yaw;
+}
+
+static void commanderLevelRPY(void)
+{
+  commanderSetActiveRoll(0);
+  commanderSetActivePitch(0);
+  commanderSetActiveYaw(0);
+}
+
+static void commanderDropToGround(void)
+{
+  altHoldMode = false;
+  commanderSetActiveThrust(0);
+  commanderLevelRPY();
+}
+
+static void commanderCacheSelectorUpdate(void)
+{
+  uint32_t tickNow = xTaskGetTickCount();
+
+  /* Check inputs and prioritize. Extrx higher then crtp */
+  if ((tickNow - extrxCache.timestamp) < COMMANDER_WDT_TIMEOUT_STABILIZE) {
+    activeCache = &extrxCache;
+  } else if ((tickNow - crtpCache.timestamp) < COMMANDER_WDT_TIMEOUT_STABILIZE) {
+    activeCache = &crtpCache;
+  } else if ((tickNow - extrxCache.timestamp) < COMMANDER_WDT_TIMEOUT_SHUTDOWN) {
+    activeCache = &extrxCache;
+    commanderLevelRPY();
+  } else if ((tickNow - crtpCache.timestamp) < COMMANDER_WDT_TIMEOUT_SHUTDOWN) {
+    activeCache = &crtpCache;
+    commanderLevelRPY();
+  } else {
+    activeCache = &crtpCache;
+    commanderDropToGround();
+  }
+}
+
+static void commanderCrtpCB(CRTPPacket* pk)
+{
+  crtpCache.targetVal[!crtpCache.activeSide] = *((CommanderCrtpValues*)pk->data);
+  crtpCache.activeSide = !crtpCache.activeSide;
+  crtpCache.timestamp = xTaskGetTickCount();
+
+  if (crtpCache.targetVal[crtpCache.activeSide].thrust == 0) {
+    thrustLocked = false;
+  }
+}
+
+/**
+ * Rotate Yaw so that the Crazyflie will change what is considered front.
+ *
+ * @param yawRad Amount of radians to rotate yaw.
+ */
+static void rotateYaw(setpoint_t *setpoint, float yawRad)
+{
+  float cosy = cosf(yawRad);
+  float siny = sinf(yawRad);
+  float originalRoll = setpoint->attitude.roll;
+  float originalPitch = setpoint->attitude.pitch;
+
+  setpoint->attitude.roll = originalRoll * cosy - originalPitch * siny;
+  setpoint->attitude.pitch = originalPitch * cosy + originalRoll * siny;
+}
+
+/**
+ * Yaw carefree mode means yaw will stay in world coordinates. So even though
+ * the Crazyflie rotates around the yaw, front will stay the same as when it started.
+ * This makes makes it a bit easier for beginners
+ */
+static void rotateYawCarefree(setpoint_t *setpoint, const state_t *state, bool reset)
+{
+  static float carefreeFrontAngle;
+
+  if (reset) {
+    carefreeFrontAngle = state->attitude.yaw;
+  }
+
+  float yawRad = (state->attitude.yaw - carefreeFrontAngle) * (float)M_PI / 180;
+  rotateYaw(setpoint, yawRad);
+}
+
+/**
+ * Update Yaw according to current setting
+ */
+#ifdef PLATFORM_CF1
+static void yawModeUpdate(setpoint_t *setpoint, const state_t *state)
+{
+  switch (yawMode)
+  {
+    case CAREFREE:
+      rotateYawCarefree(setpoint, state, carefreeResetFront);
+      break;
+    case PLUSMODE:
+      // Default in plus mode. Do nothing
+      break;
+    case XMODE: // Fall through
+    default:
+      rotateYaw(setpoint, -45 * M_PI / 180);
+      break;
+  }
+}
+#else
+static void yawModeUpdate(setpoint_t *setpoint, const state_t *state)
+{
+  switch (yawMode)
+  {
+    case CAREFREE:
+      rotateYawCarefree(setpoint, state, carefreeResetFront);
+      break;
+    case PLUSMODE:
+      rotateYaw(setpoint, 45 * M_PI / 180);
+      break;
+    case XMODE: // Fall through
+    default:
+      // Default in x-mode. Do nothing
+      break;
+  }
+}
+#endif
+
+/* Public functions */
 void commanderInit(void)
 {
   if(isInit)
   return;
-
-//  crtpInit();
-//  isInit = crtpTest();
-//  if(!isInit)LedseqRun(LEDR,seq_armed);//seq_linkup
   
-  crtpInitTaskQueue(CRTP_PORT_DEBUG);
   crtpInitTaskQueue(CRTP_PORT_COMMANDER);  
-  crtpInitTaskQueue(CRTP_PORT_PARAM);
+//  crtpInitTaskQueue(CRTP_PORT_PARAM);
   
-  crtpRegisterPortCB(CRTP_PORT_DEBUG,       mydebugCrtpCB);	
   crtpRegisterPortCB(CRTP_PORT_COMMANDER,   commanderCrtpCB);
-  crtpRegisterPortCB(CRTP_PORT_PARAM,       paramCrtpCB);
+//  crtpRegisterPortCB(CRTP_PORT_PARAM,       paramCrtpCB);
   
 
+  activeCache = &crtpCache;
   lastUpdate = xTaskGetTickCount();
+//  isInactive = true;
+  thrustLocked = true;
   isInit = true;
 }
 
 bool commanderTest(void)
 {
+  crtpTest();
   return isInit;
 }
 
-/******************************************************************
- *@brief  debug function for crtp callback function
- *@retval NULL
- ******************************************************************/
-static void mydebugCrtpCB(CRTPPacket* pk)
+void commanderExtrxSet(const CommanderCrtpValues *val)
 {
-  LedseqRun(LEDR, seq_linkup);
+  extrxCache.targetVal[!extrxCache.activeSide] = *((CommanderCrtpValues*)val);
+  extrxCache.activeSide = !extrxCache.activeSide;
+  extrxCache.timestamp = xTaskGetTickCount();
+
+  if (extrxCache.targetVal[extrxCache.activeSide].thrust == 0) {
+    thrustLocked = false;
+  }
 }
 
-static void commanderCrtpCB(CRTPPacket* pk)
-{
-  targetVal[!side] = *((struct CommanderCrtpValues*)pk->data);
-  side = !side;
-  commanderWatchdogReset();
-}
-
-static void paramCrtpCB(CRTPPacket* pk)
-{
-  altHoldMode = (bool)pk->data[0];
-  commanderWatchdogReset();
-}
-
-/******************************************************************
- *@brief  Get the current tick count
- *@retval NULL
- ******************************************************************/
-static void commanderWatchdogReset(void)
-{
-  lastUpdate = xTaskGetTickCount();
-}
-
-/******************************************************************
- *@brief  Get the tick count interval
- *@retval interval value
- ******************************************************************/
-static uint32_t commanderGetInactivityTime(void)
+uint32_t commanderGetInactivityTime(void)
 {
   return xTaskGetTickCount() - lastUpdate;
 }
 
-/******************************************************************
- *@brief  when Radio link Fail,then set the target angle to zero,
-          after that,set the thrust to the zero.
- *@retval NULL
- ******************************************************************/
-static void commanderWatchdog(void)
+void commanderGetSetpoint(setpoint_t *setpoint, const state_t *state)
 {
-  int usedSide = side;
-  uint32_t ticktimeSinceUpdate;
+  // Thrust
+  uint16_t rawThrust = commanderGetActiveThrust();
 
-  ticktimeSinceUpdate = commanderGetInactivityTime();
+  if (thrustLocked || (rawThrust < MIN_THRUST)) {
+    setpoint->thrust = 0;
+  } else {
+    setpoint->thrust = min(rawThrust, MAX_THRUST);
+  }
 
-  if (ticktimeSinceUpdate > COMMANDER_WDT_TIMEOUT_STABALIZE)
-  {
-    targetVal[usedSide].roll = 0;
-    targetVal[usedSide].pitch = 0;
-    targetVal[usedSide].yaw = 0;
+  if (altHoldMode) {
+    setpoint->thrust = 0;
+    setpoint->mode.z = modeVelocity;
+
+    setpoint->velocity.z = ((float) rawThrust - 32767.f) / 32767.f;
+  } else {
+    setpoint->mode.z = modeDisable;
   }
-  if (ticktimeSinceUpdate > COMMANDER_WDT_TIMEOUT_SHUTDOWN)
-  {
-    targetVal[usedSide].thrust = 0;
-    altHoldMode = false;
+
+  // roll/pitch
+  if (posHoldMode) {
+    setpoint->mode.x = modeVelocity;
+    setpoint->mode.y = modeVelocity;
+    setpoint->mode.roll = modeDisable;
+    setpoint->mode.pitch = modeDisable;
+
+    setpoint->velocity.x = commanderGetActivePitch()/30.0f;
+    setpoint->velocity.y = commanderGetActiveRoll()/30.0f;
+    setpoint->attitude.roll  = 0;
+    setpoint->attitude.pitch = 0;
+  } else {
+    setpoint->mode.x = modeDisable;
+    setpoint->mode.y = modeDisable;
+
+    if (stabilizationModeRoll == RATE) {
+      setpoint->mode.roll = modeVelocity;
+      setpoint->attitudeRate.roll = commanderGetActiveRoll();
+      setpoint->attitude.roll = 0;
+    } else {
+      setpoint->mode.roll = modeAbs;
+      setpoint->attitudeRate.roll = 0;
+      setpoint->attitude.roll = commanderGetActiveRoll();
+    }
+
+    if (stabilizationModePitch == RATE) {
+      setpoint->mode.pitch = modeVelocity;
+      setpoint->attitudeRate.pitch = commanderGetActivePitch();
+      setpoint->attitude.pitch = 0;
+    } else {
+      setpoint->mode.pitch = modeAbs;
+      setpoint->attitudeRate.pitch = 0;
+      setpoint->attitude.pitch = commanderGetActivePitch();
+    }
+
+    setpoint->velocity.x = 0;
+    setpoint->velocity.y = 0;
   }
-  else
-  {
-    
-  }
+
+  // Yaw
+  setpoint->attitudeRate.yaw  = commanderGetActiveYaw();
+  yawModeUpdate(setpoint, state);
+
+  setpoint->mode.yaw = modeVelocity;
 }
-
-/******************************************************************
- *@brief  if the Rock set into Holdmode,then setAltHold will be set high 
-          at one pulse,this pulse used to initial the current posture and
-          the altHoldChange surport the change value for the holdmode
- *@retval NULL
- ******************************************************************/
-void commanderGetAltHold(bool* altHold, bool* setAltHold, float* altHoldChange)
-{
-  *altHold       =  altHoldMode;                    // Still in altitude hold mode
-  *setAltHold    =  altHoldMode && !altHoldModeOld; // Hover just activated
-  *altHoldChange =  altHoldMode ? ((float) targetVal[side].thrust - 32767.) / 32767. : 0.0; //32767 Amount to change altitude hold target
-  altHoldModeOld =  altHoldMode;
-}
-
-/******************************************************************
- *@brief  Set the angle type
- *@retval NULL
- ******************************************************************/
-void commanderGetRPYType(RPYType* rollType, RPYType* pitchType, RPYType* yawType)
-{
-  *rollType  = ANGLE;
-  *pitchType = ANGLE;
-  *yawType   = RATE;
-}
-
-/******************************************************************
- *@brief  Get the euler angle from the Rock Target Value
- *@retval NULL
- ******************************************************************/
-void commanderGetRPY(float* eulerRollDesired, float* eulerPitchDesired, float* eulerYawDesired)
-{
-  int usedSide = side;
-	
-  *eulerRollDesired  = targetVal[usedSide].roll;
-  *eulerPitchDesired = targetVal[usedSide].pitch;
-  *eulerYawDesired   = targetVal[usedSide].yaw;
-}
-
-/******************************************************************
- *@brief  Get the Thrust Value from the Rock 
- *@retval NULL
- ******************************************************************/
-void commanderGetThrust(uint16_t* thrust)
-{
-  int usedSide = side;
-  uint16_t rawThrust = targetVal[usedSide].thrust;
-
-  if (rawThrust > MIN_THRUST)
-  {
-    *thrust = rawThrust;
-  }
-  else
-  {
-    *thrust = 0;
-  }
-
-  if (rawThrust > MAX_THRUST)
-  {
-    *thrust = MAX_THRUST;
-  }
-
-  commanderWatchdog();
-}
-
-//void commanderPutRPY(float* eulerRollActual, float* eulerPitchActual, float* eulerYawActual,CRTPPacket* pk)
-//{
-//  int usedSide = side;
-//  uint8_t* temp; 
-//  uint8_t  Dat[30];
-//  uint8_t i=0;
-//
-//  ActualVal[usedSide].roll  = *eulerRollActual ;
-//  ActualVal[usedSide].pitch = *eulerPitchActual;
-//  ActualVal[usedSide].yaw   = *eulerYawActual  ;
-////  temp = (uint8_t*)(&ActualVal[usedSide]);
-////  for(i=0;i<12;i++)
-////  {
-////    pk->data[i]= temp[i];
-////  }
-//  pk->data = (uint8_t*)(&ActualVal[usedSide]);
-//  
-//  
-//  //Dat = temp;
-//  //&((*pk).data[0]) = Dat;
-//  //(pk->data) = Dat;
-//}

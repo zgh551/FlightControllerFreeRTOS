@@ -159,10 +159,49 @@ typedef struct
   
 /* Exported macro ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
+/**
+ * Motor mapping configurations
+ */
+extern const MotorPerifDef* motorMapDefaultBrushed[NBR_OF_MOTORS];
+extern const MotorPerifDef* motorMapDefaltConBrushless[NBR_OF_MOTORS];
+extern const MotorPerifDef* motorMapBigQuadDeck[NBR_OF_MOTORS];
 /* Exported function prototypes ----------------------------------------------*/
+/*** Public interface ***/
+
+/**
+ * Initialisation. Will set all motors ratio to 0%
+ */
+void motorsInit(const MotorPerifDef** motorMapSelect);
+
+/**
+ * DeInitialisation. Reset to default
+ */
+void motorsDeInit(const MotorPerifDef** motorMapSelect);
+
+/**
+ * Test of the motor modules. The test will spin each motor very short in
+ * the sequence M1 to M4.
+ */
+bool motorsTest(void);
+
+/**
+ * Set the PWM ratio of the motor 'id'
+ */
+void motorsSetRatio(uint32_t id, uint16_t ratio);
+
+/**
+ * Get the PWM ratio of the motor 'id'. Return -1 if wrong ID.
+ */
+int motorsGetRatio(uint32_t id);
+
+/**
+ * FreeRTOS Task to test the Motors driver
+ */
+void motorsTestTask(void* params);
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+#endif /* __MOTORS_H__ */
 /************************ (C) COPYRIGHT ZGH *****END OF FILE****/

@@ -26,41 +26,15 @@
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_
 
-#include <stdbool.h>
-#include "commander.h"
+#include "main.h"
+#include "stabilizer_types.h"
 
-
-void controllerInit(void);
-bool controllerTest(void);
-
-/**
- * Make the controller run an update of the attitude PID. The output is
- * the desired rate which should be fed into a rate controller. The
- * attitude controller can be run in a slower update rate then the rate
- * controller.
- */
-void controllerCorrectAttitudePID(
-       float eulerRollActual, float eulerPitchActual, float eulerYawActual,
-       float eulerRollDesired, float eulerPitchDesired, float eulerYawDesired,
-       float* rollRateDesired, float* pitchRateDesired, float* yawRateDesired);
-
-/**
- * Make the controller run an update of the rate PID. The output is
- * the actuator force.
- */
-void controllerCorrectRatePID(
-       float rollRateActual, float pitchRateActual, float yawRateActual,
-       float rollRateDesired, float pitchRateDesired, float yawRateDesired);
-
-/**
- * Reset controller roll, pitch and yaw PID's.
- */
-void controllerResetAllPID(void);
-
-/**
- * Get the actuator output.
- */
-void controllerGetActuatorOutput(int16_t* roll, int16_t* pitch, int16_t* yaw);
+void stateControllerInit(void);
+bool stateControllerTest(void);
+void stateController(control_t *control, const sensorData_t *sensors,
+                                         const state_t *state,
+                                         const setpoint_t *setpoint,
+                                         const uint32_t tick);
 
 
 #endif /* CONTROLLER_H_ */

@@ -31,12 +31,11 @@ extern "C" {
 #endif
   
 #include "main.h"
-
+#include "stabilizer_types.h"
+  
 void stabilizerInit(void);
 
 bool stabilizerTest(void);
-
-void StationLink(void);
 
 #ifdef __cplusplus
 }

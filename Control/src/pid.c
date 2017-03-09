@@ -24,7 +24,6 @@
  *
  * pid.c - implementation of the PID regulator
  */
-#include <math.h>
 #include "pid.h"
 
 /**

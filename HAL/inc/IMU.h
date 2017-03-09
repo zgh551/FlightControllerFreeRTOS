@@ -23,6 +23,7 @@ extern "C" {
 #include "imu_types.h"
 /* Exported typedef ----------------------------------------------------------*/
 /* Exported define -----------------------------------------------------------*/
+#define M_PI 3.1415926
  /**
  * IMU update frequency dictates the overall update frequency.
  */

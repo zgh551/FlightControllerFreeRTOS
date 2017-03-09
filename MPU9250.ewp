@@ -325,8 +325,9 @@
           <state>$PROJ_DIR$\Application\inc</state>
           <state>$PROJ_DIR$\DLL\inc</state>
           <state>$PROJ_DIR$\HAL\inc</state>
-          <state>$PROJ_DIR$\Algorithm\inc</state>
+          <state>$PROJ_DIR$\utils\inc</state>
           <state>$PROJ_DIR$\Control\inc</state>
+          <state>$PROJ_DIR$\Configure</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -2896,24 +2897,6 @@
     </settings>
   </configuration>
   <group>
-    <name>Algorithm</name>
-    <file>
-      <name>$PROJ_DIR$\Algorithm\src\EulerAngle.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Algorithm\src\filter.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Algorithm\src\MadgwickAHRS.c</name>
-      <excluded>
-        <configuration>Debug</configuration>
-      </excluded>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Algorithm\src\MahonyAHRS.c</name>
-    </file>
-  </group>
-  <group>
     <name>Application</name>
     <file>
       <name>$PROJ_DIR$\Application\src\LedSeq.c</name>
@@ -2929,9 +2912,21 @@
     </file>
   </group>
   <group>
+    <name>Configure</name>
+    <file>
+      <name>$PROJ_DIR$\Configure\config.h</name>
+    </file>
+  </group>
+  <group>
     <name>Control</name>
     <file>
-      <name>$PROJ_DIR$\Control\src\controller.c</name>
+      <name>$PROJ_DIR$\Control\src\attitude_pid_controller.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\controller_pid.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\estimator_complementary.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\Control\src\pid.c</name>
@@ -2940,7 +2935,28 @@
       <name>$PROJ_DIR$\Control\src\pidctrl.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\Control\src\position_controller_pid.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\position_estimator_altitude.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\power_distribution.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\sensfusion6.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\sensors.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\sitaw.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\Control\src\stabilizer.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Control\src\trigger.c</name>
     </file>
   </group>
   <group>
@@ -3251,6 +3267,15 @@
     </file>
     <file>
       <name>$PROJ_DIR$\User\stm32f4xx_it.c</name>
+    </file>
+  </group>
+  <group>
+    <name>utils</name>
+    <file>
+      <name>$PROJ_DIR$\utils\src\filter.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\utils\src\num.c</name>
     </file>
   </group>
 </project>

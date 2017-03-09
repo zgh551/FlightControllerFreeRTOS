@@ -16,19 +16,45 @@ static void systemStart(void);
 /* Public functions */
 void systemLaunch(void)
 {
-	xTaskCreate(systemTask,( portCHAR* )"SYSTEM",
-              configMINIMAL_STACK_SIZE, NULL, /*Piority*/2, NULL);
+	xTaskCreate(systemTask,SYSTEM_TASK_NAME,
+                SYSTEM_TASK_STACKSIZE, NULL,
+                SYSTEM_TASK_PRI      , NULL);
 }
+
+//This must be the first module to be initialized!
+static void systemInit(void)
+{
+  if(isInit)
+    return;
+  StartMutex = xSemaphoreCreateMutex();
+  xSemaphoreTake(StartMutex, portMAX_DELAY);
+  
+  LedseqInit();
+  ComModuleInit();
+  isInit = true;
+}
+
+static bool systemTest(void)
+{
+  bool pass=isInit;
+  
+  pass &= LedseqTest();
+  pass &= ComModuleTest();
+  return pass;
+}
+
 
 portTASK_FUNCTION( systemTask , pvParameters )
 {
   bool pass = true;
   //Init the high-levels modules
   systemInit();
+  stabilizerInit();
   
   //Test the modules
-  pass &= systemTest();/////////////////
-
+  pass &= systemTest();
+  pass &= stabilizerTest();
+  
   //Start the firmware
   if(pass)
   {
@@ -56,27 +82,6 @@ portTASK_FUNCTION( systemTask , pvParameters )
   }
 }
 
-//This must be the first module to be initialized!
-static void systemInit(void)
-{
-  if(isInit)
-    return;
-  StartMutex = xSemaphoreCreateMutex();
-  xSemaphoreTake(StartMutex, portMAX_DELAY);
-  
-  LedseqInit();
-  ComModuleInit();
-  isInit = true;
-}
-
-static bool systemTest(void)
-{
-  bool pass=isInit;
-  
-  pass &= LedseqTest();
-  pass &= ComModuleTest();
-  return pass;
-}
 
 /* Global system variables */
 static void systemStart()

@@ -34,14 +34,17 @@
 #include <stdbool.h>
 #include <math.h>
 #include "stm32f4xx.h"
+    
+/* configure file */
 #include "BoardDefine.h"
-
+#include "config.h"
+    
 /* Module File include */
 #include "HMC5983.h"
 #include "ICM20601.h"
 #include "nRF24L01.h"
 #include "PPM_Encode.h" 
-#include "Motors.h"
+#include "motors.h"
 
 //FAST
 #include "sdio_sd.h"
@@ -69,15 +72,23 @@
 #include "IMU.h"
 #include "imu_types.h"
     
-/*Algorithm*/
-#include "MahonyAHRS.h"
-#include "EulerAngle.h"
-#include "filter.h"   
+/* Utils file */
+#include "num.h"
+#include "filter.h"
+    
 /*Cintrol*/
+#include "stabilizer.h"
+#include "sensors.h"
+#include "sensfusion6.h"
+#include "estimator.h"
+#include "sitaw.h"
 #include "pid.h"
 #include "pidctrl.h" 
 #include "controller.h"
-#include "stabilizer.h"
+#include "attitude_controller.h"
+#include "position_estimator.h"
+#include "position_controller.h"
+#include "power_distribution.h"    
 
 extern FIL *fil;
 /* Exported types ------------------------------------------------------------*/

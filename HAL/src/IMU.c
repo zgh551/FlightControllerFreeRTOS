@@ -131,7 +131,7 @@ void IMU_Init(void)
   imuBiasInit(&accelBias);
 #endif
   
-  varianceSampleTime = -GYRO_MIN_BIAS_TIMEOUT_MS + 1;
+  varianceSampleTime = (int32_t)(-GYRO_MIN_BIAS_TIMEOUT_MS + 1);
   imuAccLpfAttFactor = IMU_ACC_IIR_LPF_ATT_FACTOR;
   
   cosPitch = 1.0f;//cos(configblockGetCalibPitch() * M_PI/180);
@@ -336,9 +336,9 @@ static bool imuFindBiasValue(BiasObj* bias)
         (varianceSampleTime + GYRO_MIN_BIAS_TIMEOUT_MS < xTaskGetTickCount()))
     {
       varianceSampleTime = xTaskGetTickCount();
-      bias->bias.x = mean.x;
-      bias->bias.y = mean.y;
-      bias->bias.z = mean.z;
+      bias->bias.x = (int16_t)mean.x;
+      bias->bias.y = (int16_t)mean.y;
+      bias->bias.z = (int16_t)mean.z;
       foundBias = true;
       bias->isBiasValueFound = true;
     }
@@ -366,13 +366,13 @@ static void imuAccAlignToGravity(Axis3i16* in, Axis3i16* out)
 
   // Rotate around x-axis
   rx.x = in->x;
-  rx.y = in->y * cosRoll - in->z * sinRoll;
-  rx.z = in->y * sinRoll + in->z * cosRoll;
+  rx.y = (int16_t)(in->y * cosRoll - in->z * sinRoll);
+  rx.z = (int16_t)(in->y * sinRoll + in->z * cosRoll);
 
   // Rotate around y-axis
-  ry.x = rx.x * cosPitch - rx.z * sinPitch;
+  ry.x = (int16_t)(rx.x * cosPitch - rx.z * sinPitch);
   ry.y = rx.y;
-  ry.z = -rx.x * sinPitch + rx.z * cosPitch;
+  ry.z = (int16_t)(-rx.x * sinPitch + rx.z * cosPitch);
 
   out->x = ry.x;
   out->y = ry.y;

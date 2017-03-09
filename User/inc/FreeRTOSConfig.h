@@ -165,6 +165,10 @@ standard names. */
 #define xPortPendSVHandler PendSV_Handler
 #define xPortSysTickHandler SysTick_Handler
 
+//Milliseconds to OS Ticks
+#define M2T(X) ((unsigned int)((X)*(configTICK_RATE_HZ/1000.0)))
+#define F2T(X) ((unsigned int)((configTICK_RATE_HZ/(X))))
+
 #define TASK_LED_ID_NBR         1
 #define TASK_RADIO_ID_NBR       2
 #define TASK_STABILIZER_ID_NBR  3

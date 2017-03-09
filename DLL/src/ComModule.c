@@ -14,18 +14,22 @@ ComModule.c - High level communication module
 */
 #include "ComModule.h"
 
-static bool isInit =0;
+static bool isInit = false;
 
 void ComModuleInit(void)
 {
   if(isInit)
   return;
-  
+  //nRF24L01 confiure
   radiolinkInit();
+  //base on the CRTP type to decode the data
   crtpInit();
-  crtpSetLink(radiolinkGetLink()); 
+  //reister the callback function,progress the remote data
   commanderInit();
   
+  //link the channel to the radio module nRF24L01
+  crtpSetLink(radiolinkGetLink());
+
   isInit = true;
 }
  
