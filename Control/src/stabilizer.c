@@ -28,10 +28,10 @@
 static bool isInit;
 
 // State variables for the stabilizer
-static setpoint_t setpoint;
-static sensorData_t sensorData;
-static state_t state;
-static control_t control;
+ setpoint_t setpoint;
+ sensorData_t sensorData;
+ state_t state;
+ control_t control;
 
 static void stabilizerTask(void* param);
 

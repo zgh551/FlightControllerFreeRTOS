@@ -28,7 +28,7 @@ static void systemInit(void)
     return;
   StartMutex = xSemaphoreCreateMutex();
   xSemaphoreTake(StartMutex, portMAX_DELAY);
-  
+  HardwarePeripheralInit();
   LedseqInit();
   ComModuleInit();
   isInit = true;

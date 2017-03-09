@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=999484819
+Checksum=224629314
 [StLinkDriver]
 CStepIntDis=_ 0
 LeaveTargetRunning=_ 0
@@ -158,7 +158,8 @@ ProbeSetup0=2 1 1 2 0 0
 [Disassemble mode]
 mode=0
 [Breakpoints2]
-Count=0
+Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\Control\src\stabilizer.c}.96.5" 0 0 1 "" 0 "" 0
+Count=1
 [Aliases]
 A0=_ "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_1\FreeRTOS\Source\portable\IAR\ARM_CM4F\portasm.s" ""
 A1=_ "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_1\FreeRTOS\Source\queue.c" ""
