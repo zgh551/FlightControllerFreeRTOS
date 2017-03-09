@@ -13,6 +13,7 @@ typedef enum CRTPPort{
   CRTP_PORT_LOG         = 0x05,  
   CRTP_PORT_PID         = 0X06,  
   CRTP_PORT_DEBUG       = 0x08,  //for nRF24L01 debug
+  CRTP_PORT_PLATFORM    = 0x0D,
   CRTP_PORT_LINK        = 0x0F,
 }CRTPPort;
 

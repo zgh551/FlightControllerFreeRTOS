@@ -55,7 +55,7 @@ static struct crtpLinkOperations nopLink =
 static struct crtpLinkOperations *link = &nopLink;
 
 //define the number of the Port(¶Ë¿ÚºÅ)
-#define CRTP_NBR_OF_PORTS 16
+#define CRTP_NBR_OF_PORTS  16
 #define CRTP_TX_QUEUE_SIZE 20
 #define CRTP_RX_QUEUE_SIZE 2
 
@@ -81,8 +81,12 @@ void crtpInit(void)
 
   crtp_txQueue = xQueueCreate(CRTP_TX_QUEUE_SIZE, sizeof(CRTPPacket));
   /* Start Rx/Tx tasks */
-  xTaskCreate(crtpTxTask, "CRTP-Tx",configMINIMAL_STACK_SIZE, NULL, /*priority*/2, NULL);
-  xTaskCreate(crtpRxTask, "CRTP-Rx",configMINIMAL_STACK_SIZE, NULL, /*priority*/2, NULL);  
+  xTaskCreate(crtpTxTask, CRTP_TX_TASK_NAME,
+              CRTP_TX_TASK_STACKSIZE, NULL, 
+              CRTP_TX_TASK_PRI, NULL);
+  xTaskCreate(crtpRxTask, CRTP_RX_TASK_NAME,
+              CRTP_RX_TASK_STACKSIZE, NULL,
+              CRTP_RX_TASK_PRI, NULL);  
   isInit = true;
 }
 
@@ -206,11 +210,18 @@ int crtpReceivePacketWait(CRTPPort portId, CRTPPacket *p, int wait)
 void crtpTxTask(void *param)
 {
   CRTPPacket p;
-  while (1)
+  while (true)
   {
-    if (xQueueReceive(crtp_txQueue, &p, 0) == pdTRUE)
+    if (link != &nopLink)//judge the link wheter effective
     {
-      link->sendPacket(&p);
+      if (xQueueReceive(crtp_txQueue, &p, portMAX_DELAY) == pdTRUE)
+      {
+        while (link->sendPacket(&p) == false);
+      }
+    }
+    else
+    {
+      vTaskDelay(M2T(10));
     }
   }
 }
@@ -227,19 +238,26 @@ void crtpRxTask(void *param)
 
   while(1)
   {
-    if (!link->receivePacket(&p))//check wheter have the valid data
+    if (link != &nopLink)//judge the link wheter effective
     {
-      if(queues[p.port])//
+      if (!link->receivePacket(&p))//check wheter have the valid data
       {
-        // TODO: If full, remove one packet and then send
-        xQueueSend(queues[p.port], &p, 0);//
-      } 
-      else 
-      {
-        droppedPacket++;
-      }    
-      if(callbacks[p.port])//if the callback functio is exist
-      callbacks[p.port](&p);
+        if(queues[p.port])//
+        {
+          // The queue is only 1 long, so if the last packet hasn't been processed, we just replace it
+          xQueueOverwrite(queues[p.port], &p);
+        } 
+        else 
+        {
+          droppedPacket++;
+        }    
+        if(callbacks[p.port])//if the callback function is exist
+        callbacks[p.port](&p);
+      }
+    }
+    else
+    {
+      vTaskDelay(M2T(10));
     }
   }
 }

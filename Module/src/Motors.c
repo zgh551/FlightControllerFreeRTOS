@@ -112,38 +112,38 @@ static const MotorPerifDef CONN_M4 =
 static const MotorPerifDef CONN_M1_BL =
 {
     .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOA,
-    .gpioPort      = GPIOA,
-    .gpioPin       = GPIO_Pin_1,
-    .gpioPinSource = GPIO_PinSource1,
+    .gpioPerif     = PPM1_GPIO_CLK,
+    .gpioPort      = PPM1_GPIO_PORT,
+    .gpioPin       = PPM1_PIN,
+    .gpioPinSource = PPM1_SOURCE,
     .gpioOType     = GPIO_OType_PP,
-    .gpioAF        = GPIO_AF_TIM2,
-    .timPerif      = RCC_APB1Periph_TIM2,
-    .tim           = TIM2,
+    .gpioAF        = PPM1_AF,
+    .timPerif      = PPM_TIM_CLK,
+    .tim           = PPM_TIM,
     .timPolarity   = TIM_OCPolarity_Low,
-    .timDbgStop    = DBGMCU_TIM2_STOP,
+    .timDbgStop    = DBGMCU_TIM4_STOP,
     .timPeriod     = MOTORS_BL_PWM_PERIOD,
     .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare2,
-    .getCompare    = TIM_GetCapture2,
-    .ocInit        = TIM_OC2Init,
-    .preloadConfig = TIM_OC2PreloadConfig,
+    .setCompare    = TIM_SetCompare4,
+    .getCompare    = TIM_GetCapture4,
+    .ocInit        = TIM_OC4Init,
+    .preloadConfig = TIM_OC4PreloadConfig,
 };
 
 // Connector M2, PB11, TIM2_CH4, Brushless config
 static const MotorPerifDef CONN_M2_BL =
 {
     .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOB,
-    .gpioPort      = GPIOB,
-    .gpioPin       = GPIO_Pin_11,
-    .gpioPinSource = GPIO_PinSource11,
+    .gpioPerif     = PPM2_GPIO_CLK,
+    .gpioPort      = PPM2_GPIO_PORT,
+    .gpioPin       = PPM2_PIN,
+    .gpioPinSource = PPM2_SOURCE,
     .gpioOType     = GPIO_OType_PP,
-    .gpioAF        = GPIO_AF_TIM2,
-    .timPerif      = RCC_APB1Periph_TIM2,
-    .tim           = TIM2,
+    .gpioAF        = PPM2_AF,
+    .timPerif      = PPM_TIM_CLK,
+    .tim           = PPM_TIM,
     .timPolarity   = TIM_OCPolarity_Low,
-    .timDbgStop    = DBGMCU_TIM2_STOP,
+    .timDbgStop    = DBGMCU_TIM4_STOP,
     .timPeriod     = MOTORS_BL_PWM_PERIOD,
     .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
     .setCompare    = TIM_SetCompare4,
@@ -156,36 +156,36 @@ static const MotorPerifDef CONN_M2_BL =
 static const MotorPerifDef CONN_M3_BL =
 {
     .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOA,
-    .gpioPort      = GPIOA,
-    .gpioPin       = GPIO_Pin_15,
-    .gpioPinSource = GPIO_PinSource15,
+    .gpioPerif     = PPM3_GPIO_CLK,
+    .gpioPort      = PPM3_GPIO_PORT,
+    .gpioPin       = PPM3_PIN,
+    .gpioPinSource = PPM3_SOURCE,
     .gpioOType     = GPIO_OType_PP,
-    .gpioAF        = GPIO_AF_TIM2,
-    .timPerif      = RCC_APB1Periph_TIM2,
-    .tim           = TIM2,
+    .gpioAF        = PPM3_AF,
+    .timPerif      = PPM_TIM_CLK,
+    .tim           = PPM_TIM,
     .timPolarity   = TIM_OCPolarity_Low,
-    .timDbgStop    = DBGMCU_TIM2_STOP,
+    .timDbgStop    = DBGMCU_TIM4_STOP,
     .timPeriod     = MOTORS_BL_PWM_PERIOD,
     .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare1,
-    .getCompare    = TIM_GetCapture1,
-    .ocInit        = TIM_OC1Init,
-    .preloadConfig = TIM_OC1PreloadConfig,
+    .setCompare    = TIM_SetCompare4,
+    .getCompare    = TIM_GetCapture4,
+    .ocInit        = TIM_OC4Init,
+    .preloadConfig = TIM_OC4PreloadConfig,
 };
 
 // Connector M4, PB9, TIM4_CH4, Brushless config
 static const MotorPerifDef CONN_M4_BL =
 {
     .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOB,
-    .gpioPort      = GPIOB,
-    .gpioPin       = GPIO_Pin_9,
-    .gpioPinSource = GPIO_PinSource9,
+    .gpioPerif     = PPM4_GPIO_CLK,
+    .gpioPort      = PPM4_GPIO_PORT,
+    .gpioPin       = PPM4_PIN,
+    .gpioPinSource = PPM4_SOURCE,
     .gpioOType     = GPIO_OType_PP,
-    .gpioAF        = GPIO_AF_TIM4,
-    .timPerif      = RCC_APB1Periph_TIM4,
-    .tim           = TIM4,
+    .gpioAF        = PPM4_AF,
+    .timPerif      = PPM_TIM_CLK,
+    .tim           = PPM_TIM,
     .timPolarity   = TIM_OCPolarity_Low,
     .timDbgStop    = DBGMCU_TIM4_STOP,
     .timPeriod     = MOTORS_BL_PWM_PERIOD,
@@ -218,28 +218,6 @@ static const MotorPerifDef DECK_TX2_TIM2 =
     .preloadConfig = TIM_OC3PreloadConfig,
 };
 
-// Deck TX2, PA2, TIM5_CH3
-static const MotorPerifDef DECK_TX2_TIM5 =
-{
-    .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOA,
-    .gpioPort      = GPIOA,
-    .gpioPin       = GPIO_Pin_2,
-    .gpioPinSource = GPIO_PinSource2,
-    .gpioOType     = GPIO_OType_OD,
-    .gpioAF        = GPIO_AF_TIM5,
-    .timPerif      = RCC_APB1Periph_TIM5,
-    .tim           = TIM5,
-    .timPolarity   = TIM_OCPolarity_High,
-    .timDbgStop    = DBGMCU_TIM5_STOP,
-    .timPeriod     = MOTORS_BL_PWM_PERIOD,
-    .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare3,
-    .getCompare    = TIM_GetCapture3,
-    .ocInit        = TIM_OC3Init,
-    .preloadConfig = TIM_OC3PreloadConfig,
-};
-
 // Deck RX2, PA3, TIM2_CH4
 static const MotorPerifDef DECK_RX2_TIM2 =
 {
@@ -260,50 +238,6 @@ static const MotorPerifDef DECK_RX2_TIM2 =
     .getCompare    = TIM_GetCapture4,
     .ocInit        = TIM_OC4Init,
     .preloadConfig = TIM_OC4PreloadConfig,
-};
-
-// Deck RX2, PA3, TIM5_CH4
-static const MotorPerifDef DECK_RX2_TIM5 =
-{
-    .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOA,
-    .gpioPort      = GPIOA,
-    .gpioPin       = GPIO_Pin_3,
-    .gpioPinSource = GPIO_PinSource3,
-    .gpioOType     = GPIO_OType_OD,
-    .gpioAF        = GPIO_AF_TIM5,
-    .timPerif      = RCC_APB1Periph_TIM5,
-    .tim           = TIM5,
-    .timPolarity   = TIM_OCPolarity_High,
-    .timDbgStop    = DBGMCU_TIM5_STOP,
-    .timPeriod     = MOTORS_BL_PWM_PERIOD,
-    .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare4,
-    .getCompare    = TIM_GetCapture4,
-    .ocInit        = TIM_OC4Init,
-    .preloadConfig = TIM_OC4PreloadConfig,
-};
-
-// Deck IO1, PB8, TIM4_CH3
-static const MotorPerifDef DECK_IO1_TIM4 =
-{
-    .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOB,
-    .gpioPort      = GPIOB,
-    .gpioPin       = GPIO_Pin_8,
-    .gpioPinSource = GPIO_PinSource8,
-    .gpioOType     = GPIO_OType_OD,
-    .gpioAF        = GPIO_AF_TIM4,
-    .timPerif      = RCC_APB1Periph_TIM4,
-    .tim           = TIM4,
-    .timPolarity   = TIM_OCPolarity_High,
-    .timDbgStop    = DBGMCU_TIM4_STOP,
-    .timPeriod     = MOTORS_BL_PWM_PERIOD,
-    .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare3,
-    .getCompare    = TIM_GetCapture3,
-    .ocInit        = TIM_OC3Init,
-    .preloadConfig = TIM_OC3PreloadConfig,
 };
 
 // Deck IO2, PB5, TIM3_CH2
@@ -350,71 +284,7 @@ static const MotorPerifDef DECK_IO3 =
     .preloadConfig = TIM_OC1PreloadConfig,
 };
 
-// Deck SCK, PA5, TIM2_CH1
-static const MotorPerifDef DECK_SCK =
-{
-    .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOA,
-    .gpioPort      = GPIOA,
-    .gpioPin       = GPIO_Pin_5,
-    .gpioPinSource = GPIO_PinSource5,
-    .gpioOType     = GPIO_OType_OD,
-    .gpioAF        = GPIO_AF_TIM2,
-    .timPerif      = RCC_APB1Periph_TIM2,
-    .tim           = TIM2,
-    .timPolarity   = TIM_OCPolarity_High,
-    .timDbgStop    = DBGMCU_TIM2_STOP,
-    .timPeriod     = MOTORS_BL_PWM_PERIOD,
-    .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare1,
-    .getCompare    = TIM_GetCapture1,
-    .ocInit        = TIM_OC1Init,
-    .preloadConfig = TIM_OC1PreloadConfig,
-};
 
-// Deck MISO, PA6, TIM3_CH1
-static const MotorPerifDef DECK_MISO =
-{
-    .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOA,
-    .gpioPort      = GPIOA,
-    .gpioPin       = GPIO_Pin_6,
-    .gpioPinSource = GPIO_PinSource6,
-    .gpioOType     = GPIO_OType_OD,
-    .gpioAF        = GPIO_AF_TIM3,
-    .timPerif      = RCC_APB1Periph_TIM3,
-    .tim           = TIM3,
-    .timPolarity   = TIM_OCPolarity_High,
-    .timDbgStop    = DBGMCU_TIM3_STOP,
-    .timPeriod     = MOTORS_BL_PWM_PERIOD,
-    .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare1,
-    .getCompare    = TIM_GetCapture1,
-    .ocInit        = TIM_OC1Init,
-    .preloadConfig = TIM_OC1PreloadConfig,
-};
-
-// Deck MOSI, PA7, TIM14_CH1
-static const MotorPerifDef DECK_MOSI =
-{
-    .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOA,
-    .gpioPort      = GPIOA,
-    .gpioPin       = GPIO_Pin_7,
-    .gpioPinSource = GPIO_PinSource7,
-    .gpioOType     = GPIO_OType_OD,
-    .gpioAF        = GPIO_AF_TIM14,
-    .timPerif      = RCC_APB1Periph_TIM14,
-    .tim           = TIM14,
-    .timPolarity   = TIM_OCPolarity_High,
-    .timDbgStop    = DBGMCU_TIM14_STOP,
-    .timPeriod     = MOTORS_BL_PWM_PERIOD,
-    .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare1,
-    .getCompare    = TIM_GetCapture1,
-    .ocInit        = TIM_OC1Init,
-    .preloadConfig = TIM_OC1PreloadConfig,
-};
 
 /**
  * Default brushed mapping to M1-M4 connectors.
@@ -519,7 +389,7 @@ void motorsInit(const MotorPerifDef** motorMapSelect)
     GPIO_StructInit(&GPIO_InitStructure);
     GPIO_InitStructure.GPIO_Mode = MOTORS_GPIO_MODE;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_OType = motorMap[i]->gpioOType;
+    GPIO_InitStructure.GPIO_OType = (GPIOOType_TypeDef)motorMap[i]->gpioOType;
     GPIO_InitStructure.GPIO_Pin = motorMap[i]->gpioPin;
     GPIO_Init(motorMap[i]->gpioPort, &GPIO_InitStructure);
 
@@ -583,23 +453,8 @@ void motorsSetRatio(uint32_t id, uint16_t ithrust)
 {
   uint16_t ratio;
 
-//  ASSERT(id < NBR_OF_MOTORS);
-
   ratio = ithrust;
 
-#ifdef ENABLE_THRUST_BAT_COMPENSATED
-  if (motorMap[id]->drvType == BRUSHED)
-  {
-    float thrust = ((float)ithrust / 65536.0f) * 60;
-    float volts = -0.0006239 * thrust * thrust + 0.088 * thrust;
-//    float supply_voltage = pmGetBatteryVoltage();
-//    float percentage = volts / supply_voltage;
-//    percentage = percentage > 1.0 ? 1.0 : percentage;
-//    ratio = percentage * UINT16_MAX;
-//    motor_ratios[id] = ratio;
-
-  }
-#endif
   if (motorMap[id]->drvType == BRUSHLESS)
   {
     motorMap[id]->setCompare(motorMap[id]->tim, motorsBLConv16ToBits(ratio));
@@ -713,41 +568,3 @@ void motorsPlayMelody(uint16_t *notes)
     motorsPlayTone(note, duration);
   } while (duration != 0);
 }
-
-//LOG_GROUP_START(pwm)
-//LOG_ADD(LOG_UINT32, m1_pwm, &motor_ratios[0])
-//LOG_ADD(LOG_UINT32, m2_pwm, &motor_ratios[1])
-//LOG_ADD(LOG_UINT32, m3_pwm, &motor_ratios[2])
-//LOG_ADD(LOG_UINT32, m4_pwm, &motor_ratios[3])
-//LOG_GROUP_STOP(pwm)
-
-//void MotorsInit(void)
-//{
-//  if (isInit)
-//  return;
-//
-//  PPM_GPIO_Config();
-//  PPM_TIM_Config();
-//  printf("PPM  Init Finish\n");
-//
-//  isInit = true;
-//}
-//
-//void motorsSetRatio(MOTOR id, uint16_t ratio)
-//{
-//  switch(id)
-//  {
-//    case MOTOR_M1:
-//      TIM_SetCompare1(PPM_TIM,1000 + ratio);
-//      break;
-//    case MOTOR_M2:
-//      TIM_SetCompare2(QDCPT_TIM, C_16_TO_BITS(ratio));
-//      break;
-//    case MOTOR_M3:
-//      TIM_SetCompare3(QDCPT_TIM, C_16_TO_BITS(ratio));
-//      break;
-//    case MOTOR_M4:
-//      TIM_SetCompare4(QDCPT_TIM, C_16_TO_BITS(ratio));
-//      break;
-//  }
-//}

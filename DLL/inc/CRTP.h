@@ -6,12 +6,10 @@ extern "C" {
 
 #include "main.h"
 #include "CRTP_Type.h"
-  
-
 
 #define CRTP_HEADER(port, channel) (((port & 0x0F) << 4) | (channel & 0x0F))
-#define CRTP_GET_NBR(port) (port)
-//#define CRTP_PORT()
+#define CRTP_IS_NULL_PACKET(P) ((P.header&0xF3)==0xF3)
+
 
 #define CRTP_IS_NULL_PACKET(P) ((P.header&0xF3)==0xF3)
 
