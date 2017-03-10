@@ -74,6 +74,14 @@ extern "C" {
 
 #define HMC5983_CS_LOW    GPIO_ResetBits(HMC5983_SPI_nCS_PORT,HMC5983_SPI_nCS_PIN)
 #define HMC5983_CS_HIGH   GPIO_SetBits(HMC5983_SPI_nCS_PORT,HMC5983_SPI_nCS_PIN)
+  
+/**********************MS5611******************************/
+#define MS5611_SPI_nCS_PIN     GPIO_Pin_12
+#define MS5611_SPI_nCS_PORT    GPIOE
+#define MS5611_SPI_nCS_CLK     RCC_AHB1Periph_GPIOE
+
+#define MS5611_CS_LOW    GPIO_ResetBits(MS5611_SPI_nCS_PORT,MS5611_SPI_nCS_PIN)
+#define MS5611_CS_HIGH   GPIO_SetBits(MS5611_SPI_nCS_PORT,MS5611_SPI_nCS_PIN)  
 
 /**********************nRF24L01******************************/
 //SPI

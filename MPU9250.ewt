@@ -3662,6 +3662,9 @@
       <name>$PROJ_DIR$\Module\src\MPU9250.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\Module\src\ms5611.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\Module\src\nRF24L01.c</name>
     </file>
     <file>

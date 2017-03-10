@@ -69,7 +69,7 @@ float half2single(uint16_t number)
     
     //All binary16 can be mapped in a binary32
     if(e==0)
-        e=15-127;
+        e=(uint32_t)(15-127);
     if (e==0x1F)
     {
         if (number&0x03FF)

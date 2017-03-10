@@ -53,15 +53,9 @@ void sensorsAcquire(sensorData_t *sensors, const uint32_t tick)
   }
 
  if (RATE_DO_EXECUTE(BARO_RATE, tick) && imuHasBarometer()) {
-//#ifdef PLATFORM_CF1
-//    ms5611GetData(&sensors->baro.pressure,
-//                 &sensors->baro.temperature,
-//                 &sensors->baro.asl);
-//#else
-//    lps25hGetData(&sensors->baro.pressure,
-//                 &sensors->baro.temperature,
-//                 &sensors->baro.asl);
-//#endif
+    MS5611_GetData(&sensors->baro.pressure,
+                   &sensors->baro.temperature,
+                   &sensors->baro.asl);
     // Experimental: receive the position from parameters
     if (position.timestamp) {
       sensors->position = position;

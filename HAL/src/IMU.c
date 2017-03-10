@@ -116,7 +116,8 @@ void IMU_Init(void)
 #endif
 
 #ifdef IMU_ENABLE_PRESSURE_MS5611
-  if (true)
+  MS5611_Init();
+  if (MS5611_SelfTest() == true)
   {
     isMs5611Present = true;
     LedseqRun(LEDR,seq_linkup);

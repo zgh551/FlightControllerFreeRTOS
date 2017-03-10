@@ -42,6 +42,7 @@
 /* Module File include */
 #include "HMC5983.h"
 #include "ICM20601.h"
+#include "ms5611.h"
 #include "nRF24L01.h"
 #include "PPM_Encode.h" 
 #include "motors.h"

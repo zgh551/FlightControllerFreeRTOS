@@ -575,16 +575,11 @@ void HardwarePeripheralInit(void)
   USART_Config();
   printf("UART Init Finish\n");
   
-//  STM_LED_Init(LED1);
-//  STM_LED_Init(LED2);
   SENSOR_POWER_EN_Init();
   SENSOR_POWER_ENABLE();
   VBUS_Init();
   printf("LED Init Finish\n");
-//  
-//  SPI1_Init();
-//  printf("SPI  Init Finish\n");
-//  
+
 //  PPM_GPIO_Config();
 //  PPM_TIM_Config();
 //  printf("PPM  Init Finish\n");
@@ -592,10 +587,3 @@ void HardwarePeripheralInit(void)
 //  Tim1Configure();
 //  printf("TIM1  Init Finish\n");
 }
-
-/* Public functions */
-//void systemLaunch(void)
-//{
-//	xTaskCreate(systemTask,( signed portCHAR* )"SYSTEM",
-//              configMINIMAL_STACK_SIZE, NULL, /*Piority*/2, NULL);
-//}

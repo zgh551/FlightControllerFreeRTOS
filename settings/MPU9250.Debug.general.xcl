@@ -2,7 +2,7 @@
 
 "D:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\arm\bin\armjlink2.dll" 
 
-"E:\Work\FlightControllerFreeRTOS\Debug\Exe\MPU9250.out" 
+"E:\root\FlightControllerFreeRTOS\Debug\Exe\MPU9250.out" 
 
 --plugin "D:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\arm\bin\armbat.dll" 
 
