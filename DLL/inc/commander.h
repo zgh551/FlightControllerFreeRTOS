@@ -8,6 +8,7 @@ extern "C" {
 #include "BoardDefineType.h"  
 #include "stabilizer_types.h"
 #include "commander_type.h"
+#include "CRTP_Type.h"
   
 #ifdef PLATFORM_CF1
   #define DEFAULT_YAW_MODE  PLUSMODE
@@ -28,7 +29,7 @@ void commanderExtrxSet(const CommanderCrtpValues* val);
 
 void commanderGetSetpoint(setpoint_t *setpoint, const state_t *state);
 
-
+void commanderSendStateRemote(state_t state);
 #ifdef __cplusplus
 }
 #endif

@@ -32,6 +32,20 @@ typedef enum
   XMODE     = 2, // X-mode. M1 & M4 are defined as front
 } YawModeType;
 
+
+//remote type
+__packed union {
+  uint8_t dat[28];
+  __packed struct{
+    float pitch;
+    float roll;
+    float yaw;
+    float x;
+    float y;
+    float z;
+    float rev;
+  };
+}f2b;
 static bool isInit;
 static CommanderCache crtpCache;
 static CommanderCache extrxCache;
@@ -220,10 +234,10 @@ void commanderInit(void)
   return;
   
   crtpInitTaskQueue(CRTP_PORT_COMMANDER);  
-//  crtpInitTaskQueue(CRTP_PORT_PARAM);
+//  crtpInitTaskQueue(CRTP_PORT_DEBUG);
   
   crtpRegisterPortCB(CRTP_PORT_COMMANDER,   commanderCrtpCB);
-//  crtpRegisterPortCB(CRTP_PORT_PARAM,       paramCrtpCB);
+//  crtpRegisterPortCB(CRTP_PORT_DEBUG,       paramCrtpCB);
   
 
   activeCache = &crtpCache;
@@ -319,4 +333,26 @@ void commanderGetSetpoint(setpoint_t *setpoint, const state_t *state)
   yawModeUpdate(setpoint, state);
 
   setpoint->mode.yaw = modeVelocity;
+}
+
+
+void commanderSendStateRemote(state_t state)
+{
+  CRTPPacket temp_p;
+  uint8_t i;
+  f2b.pitch =  state.attitude.pitch ;
+  f2b.roll = state.attitude.roll;
+  f2b.yaw = state.attitude.yaw;
+  
+  f2b.x = state.position.x;
+  f2b.y = state.position.y;
+  f2b.z = state.position.z;
+  
+  temp_p.port = CRTP_PORT_DEBUG;
+  temp_p.size = 28;
+  for(i=0;i<temp_p.size;i++)
+  {
+    temp_p.data[i] = f2b.dat[i];
+  }
+  crtpSendPacket(&temp_p);
 }

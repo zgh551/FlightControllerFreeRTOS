@@ -99,3 +99,10 @@ In order to make the program work, you must do the following:
  
  pidCrtlTask        2
  
+ 
+ 
+ raw = 4
+ period  = 56250
+ Prescaler = 3
+ 
+ 

@@ -53,7 +53,7 @@ typedef struct
 /* Exported define -----------------------------------------------------------*/
 // The following defines gives a PWM of 8 bits at ~328KHz for a sysclock of 180MHz
 // CF2 PWM ripple is filtered better at 328kHz. At 168kHz the NCP702 regulator is affected.
-  #define TIM_CLOCK_HZ 90000000
+  #define TIM_CLOCK_HZ              90000000
   #define MOTORS_PWM_BITS           8
   #define MOTORS_PWM_PERIOD         ((1<<MOTORS_PWM_BITS) - 1)
   #define MOTORS_PWM_PRESCALE       0

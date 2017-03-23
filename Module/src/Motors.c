@@ -120,14 +120,14 @@ static const MotorPerifDef CONN_M1_BL =
     .gpioAF        = PPM1_AF,
     .timPerif      = PPM_TIM_CLK,
     .tim           = PPM_TIM,
-    .timPolarity   = TIM_OCPolarity_Low,
+    .timPolarity   = TIM_OCPolarity_High,
     .timDbgStop    = DBGMCU_TIM4_STOP,
     .timPeriod     = MOTORS_BL_PWM_PERIOD,
     .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare4,
-    .getCompare    = TIM_GetCapture4,
-    .ocInit        = TIM_OC4Init,
-    .preloadConfig = TIM_OC4PreloadConfig,
+    .setCompare    = TIM_SetCompare1,
+    .getCompare    = TIM_GetCapture1,
+    .ocInit        = TIM_OC1Init,
+    .preloadConfig = TIM_OC1PreloadConfig,
 };
 
 // Connector M2, PB11, TIM2_CH4, Brushless config
@@ -142,14 +142,14 @@ static const MotorPerifDef CONN_M2_BL =
     .gpioAF        = PPM2_AF,
     .timPerif      = PPM_TIM_CLK,
     .tim           = PPM_TIM,
-    .timPolarity   = TIM_OCPolarity_Low,
+    .timPolarity   = TIM_OCPolarity_High,
     .timDbgStop    = DBGMCU_TIM4_STOP,
     .timPeriod     = MOTORS_BL_PWM_PERIOD,
     .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare4,
-    .getCompare    = TIM_GetCapture4,
-    .ocInit        = TIM_OC4Init,
-    .preloadConfig = TIM_OC4PreloadConfig,
+    .setCompare    = TIM_SetCompare2,
+    .getCompare    = TIM_GetCapture2,
+    .ocInit        = TIM_OC2Init,
+    .preloadConfig = TIM_OC2PreloadConfig,
 };
 
 // Connector M3, PA15, TIM2_CH1, Brushless config
@@ -164,14 +164,14 @@ static const MotorPerifDef CONN_M3_BL =
     .gpioAF        = PPM3_AF,
     .timPerif      = PPM_TIM_CLK,
     .tim           = PPM_TIM,
-    .timPolarity   = TIM_OCPolarity_Low,
+    .timPolarity   = TIM_OCPolarity_High,
     .timDbgStop    = DBGMCU_TIM4_STOP,
     .timPeriod     = MOTORS_BL_PWM_PERIOD,
     .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare4,
-    .getCompare    = TIM_GetCapture4,
-    .ocInit        = TIM_OC4Init,
-    .preloadConfig = TIM_OC4PreloadConfig,
+    .setCompare    = TIM_SetCompare3,
+    .getCompare    = TIM_GetCapture3,
+    .ocInit        = TIM_OC3Init,
+    .preloadConfig = TIM_OC3PreloadConfig,
 };
 
 // Connector M4, PB9, TIM4_CH4, Brushless config
@@ -186,7 +186,7 @@ static const MotorPerifDef CONN_M4_BL =
     .gpioAF        = PPM4_AF,
     .timPerif      = PPM_TIM_CLK,
     .tim           = PPM_TIM,
-    .timPolarity   = TIM_OCPolarity_Low,
+    .timPolarity   = TIM_OCPolarity_High,
     .timDbgStop    = DBGMCU_TIM4_STOP,
     .timPeriod     = MOTORS_BL_PWM_PERIOD,
     .timPrescaler  = MOTORS_BL_PWM_PRESCALE,

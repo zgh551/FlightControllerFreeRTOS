@@ -28,10 +28,10 @@
 static bool isInit;
 
 // State variables for the stabilizer
- setpoint_t setpoint;
- sensorData_t sensorData;
- state_t state;
- control_t control;
+setpoint_t     setpoint;
+sensorData_t   sensorData;
+state_t        fly_state;
+control_t      control;
 
 static void stabilizerTask(void* param);
 
@@ -92,15 +92,16 @@ static void stabilizerTask(void* param)
 
     sensorsAcquire(&sensorData, tick);
 
-    stateEstimator(&state, &sensorData, tick);
-    commanderGetSetpoint(&setpoint, &state);
+    stateEstimator(&fly_state, &sensorData, tick);
+    commanderGetSetpoint(&setpoint, &fly_state);
 
-    sitAwUpdateSetpoint(&setpoint, &sensorData, &state);
+    sitAwUpdateSetpoint(&setpoint, &sensorData, &fly_state);
 
-    stateController(&control, &sensorData, &state, &setpoint, tick);
+    stateController(&control, &sensorData, &fly_state, &setpoint, tick);
     powerDistribution(&control);
-
+  
     tick++;
+    commanderSendStateRemote(fly_state);
   }
 }
 

@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=224629314
+Checksum=-722119137
 [StLinkDriver]
 CStepIntDis=_ 0
 LeaveTargetRunning=_ 0
@@ -59,7 +59,7 @@ Stop=1
 Freq=10000000
 MultiCoreRunAll=1
 [struct_types]
-Fmt0=CRTPPacket-size	4	0
+Fmt0=CRTPPacket-size	3	0
 Fmt1=SD_CardInfo-CardType	3	0
 [array_types]
 Fmt0=BYTE[512]	4	0
@@ -158,20 +158,24 @@ ProbeSetup0=2 1 1 2 0 0
 [Disassemble mode]
 mode=0
 [Breakpoints2]
-Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\Control\src\stabilizer.c}.96.5" 0 0 1 "" 0 "" 0
+Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\DLL\src\ComModule.c}.24.3" 0 0 1 "" 0 "" 0
 Count=1
 [Aliases]
-A0=_ "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_1\FreeRTOS\Source\portable\IAR\ARM_CM4F\portasm.s" ""
-A1=_ "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_1\FreeRTOS\Source\queue.c" ""
-A2=_ "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_1\FreeRTOS\Source\timers.c" ""
-A3=_ "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_2\User\main.c" ""
-A4=_ "F:\朱国华\9250\WorkSpace_RTOS\FreeRTOS\Source\portable\IAR\ARM_CM4F\portasm.s" ""
-A5=_ "F:\朱国华\9250\WorkSpace_RTOS\FreeRTOS\Source\queue.c" ""
-A6=_ "F:\朱国华\9250\WorkSpace_RTOS\FreeRTOS\Source\timers.c" ""
-A7=_ "F:\朱国华\9250\WorkSpace_RTOS\User\main.c" ""
-A8=_ "F:\朱国华\9250\WorkSpace_ppm\CMSIS\Include\core_cm4.h" ""
-A9=_ "F:\朱国华\9250\WorkSpace_ppm\Module\src\HMC5983.c" "F:\朱国华\test_imu\9250\WorkSpace_ppm\Module\src\HMC5983.c"
-A10=_ "F:\朱国华\9250\WorkSpace_ppm\Module\src\ICM20601.c" ""
-A11=_ "F:\朱国华\9250\WorkSpace_ppm\User\main.c" ""
-Count=12
+A0=_ "E:\Work\FlightControllerFreeRTOS\FreeRTOS\Source\portable\IAR\ARM_CM4F\portasm.s" ""
+A1=_ "E:\Work\FlightControllerFreeRTOS\FreeRTOS\Source\queue.c" ""
+A2=_ "E:\Work\FlightControllerFreeRTOS\FreeRTOS\Source\timers.c" ""
+A3=_ "E:\Work\FlightControllerFreeRTOS\User\main.c" ""
+A4=_ "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_1\FreeRTOS\Source\portable\IAR\ARM_CM4F\portasm.s" ""
+A5=_ "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_1\FreeRTOS\Source\queue.c" ""
+A6=_ "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_1\FreeRTOS\Source\timers.c" ""
+A7=_ "E:\Work\四轴飞控项目\WorkSpace_RTOS_V1_2\User\main.c" ""
+A8=_ "F:\朱国华\9250\WorkSpace_RTOS\FreeRTOS\Source\portable\IAR\ARM_CM4F\portasm.s" ""
+A9=_ "F:\朱国华\9250\WorkSpace_RTOS\FreeRTOS\Source\queue.c" ""
+A10=_ "F:\朱国华\9250\WorkSpace_RTOS\FreeRTOS\Source\timers.c" ""
+A11=_ "F:\朱国华\9250\WorkSpace_RTOS\User\main.c" ""
+A12=_ "F:\朱国华\9250\WorkSpace_ppm\CMSIS\Include\core_cm4.h" ""
+A13=_ "F:\朱国华\9250\WorkSpace_ppm\Module\src\HMC5983.c" "F:\朱国华\test_imu\9250\WorkSpace_ppm\Module\src\HMC5983.c"
+A14=_ "F:\朱国华\9250\WorkSpace_ppm\Module\src\ICM20601.c" ""
+A15=_ "F:\朱国华\9250\WorkSpace_ppm\User\main.c" ""
+Count=16
 SuppressDialog=0

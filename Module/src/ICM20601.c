@@ -128,7 +128,7 @@ void ICM20601_Init(void)
     {ICM20601_GYRO_CONFIG  ,0x18},//set : ¡À2000dps  250hz
     {ICM20601_ACCEL_CONFIG ,0x18},//set : ¡À16g 218.1hz
     {ICM20601_CONFIG       ,0x00},//set : 250hz for gyro
-    {ICM20601_ACCEL_CONFIG2,0x00},//set : 7.8HZ rate: 1Khz
+    {ICM20601_ACCEL_CONFIG2,0x00},//set : 218.1hz for acc
     {ICM20601_USER_CTRL    ,0x10} //Disable I2C Slave module and put the serial interface in SPI mode only.
   };
 

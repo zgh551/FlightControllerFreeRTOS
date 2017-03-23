@@ -25,7 +25,7 @@
 #define GYRO_NBR_OF_AXES            3
 #define GYRO_MIN_BIAS_TIMEOUT_MS    pdMS_TO_TICKS(1*1000)
 
-#define IMU_TAKE_ACCEL_BIAS   
+//#define IMU_TAKE_ACCEL_BIAS   
 #define IMU_NBR_OF_BIAS_SAMPLES  1024
 
 #define GYRO_VARIANCE_BASE        3000
@@ -135,9 +135,9 @@ void IMU_Init(void)
   varianceSampleTime = (int32_t)(-GYRO_MIN_BIAS_TIMEOUT_MS + 1);
   imuAccLpfAttFactor = IMU_ACC_IIR_LPF_ATT_FACTOR;
   
-  cosPitch = 1.0f;//cos(configblockGetCalibPitch() * M_PI/180);
+  cosPitch = 0.0f;//cos(configblockGetCalibPitch() * M_PI/180);
   sinPitch = 0.0f;//sin(configblockGetCalibPitch() * M_PI/180);
-  cosRoll  = 1.0f;//cos(configblockGetCalibRoll() * M_PI/180);
+  cosRoll  = 0.0f;//cos(configblockGetCalibRoll() * M_PI/180);
   sinRoll  = 0.0f;//sin(configblockGetCalibRoll() * M_PI/180);
 
   isInit = true;
@@ -184,21 +184,21 @@ void imu6Read(Axis3f *gyro,Axis3f *acc)
 
   imuAccIIRLPFilter(&accelMpu, &accelLPF, &accelStoredFilterValues,
                     (int32_t)imuAccLpfAttFactor);
-
-  imuAccAlignToGravity(&accelLPF, &accelLPFAligned);
+//
+//  imuAccAlignToGravity(&accelLPF, &accelLPFAligned);
 
   // Re-map outputs
-  gyro->x = -(gyroMpu.x - gyroBias.bias.x) * IMU_DEG_PER_LSB_CFG*M_PI/180.0f;
-  gyro->y =  (gyroMpu.y - gyroBias.bias.y) * IMU_DEG_PER_LSB_CFG*M_PI/180.0f;
-  gyro->z =  (gyroMpu.z - gyroBias.bias.z) * IMU_DEG_PER_LSB_CFG*M_PI/180.0f;
+  gyro->x =  (gyroMpu.y - gyroBias.bias.x) * IMU_DEG_PER_LSB_CFG;
+  gyro->y =  (gyroMpu.x - gyroBias.bias.y) * IMU_DEG_PER_LSB_CFG;
+  gyro->z =  -(gyroMpu.z - gyroBias.bias.z) * IMU_DEG_PER_LSB_CFG;
 #ifdef IMU_TAKE_ACCEL_BIAS
-  acc->x = (accelLPFAligned.x - accelBias.bias.x) * IMU_G_PER_LSB_CFG;
-  acc->y = (accelLPFAligned.y - accelBias.bias.y) * IMU_G_PER_LSB_CFG;
-  acc->z = (accelLPFAligned.z - accelBias.bias.z) * IMU_G_PER_LSB_CFG;
+  acc->x = (accelMpu.x - accelBias.bias.x) * IMU_G_PER_LSB_CFG;
+  acc->y = (accelMpu.y - accelBias.bias.y) * IMU_G_PER_LSB_CFG;
+  acc->z = (accelMpu.z - accelBias.bias.z) * IMU_G_PER_LSB_CFG;
 #else
-  acc->x = -(accelLPFAligned.x) * IMU_G_PER_LSB_CFG;
-  acc->y =  (accelLPFAligned.y) * IMU_G_PER_LSB_CFG;
-  acc->z =  (accelLPFAligned.z) * IMU_G_PER_LSB_CFG;
+  acc->x =  (accelLPF.y) * IMU_G_PER_LSB_CFG;
+  acc->y =  (accelLPF.x) * IMU_G_PER_LSB_CFG;
+  acc->z =  -(accelLPF.z) * IMU_G_PER_LSB_CFG;
 #endif
 }
 

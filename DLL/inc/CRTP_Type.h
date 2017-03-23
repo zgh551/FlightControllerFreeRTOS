@@ -32,7 +32,7 @@ typedef struct _CRTPPacket
       };
       uint8_t data[CRTP_MAX_DATA_SIZE];
     };
-    uint8_t raw[CRTP_MAX_DATA_SIZE+2];
+    uint8_t raw[CRTP_MAX_DATA_SIZE+1];
   };
 }__packed CRTPPacket;
 

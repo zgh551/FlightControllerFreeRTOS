@@ -138,6 +138,7 @@ static void RadioTask(void * arg)
 //    EXTI_GenerateSWInterrupt(nRF24L01_SPI_IRQ_LINE);
     xSemaphoreTake(dataRdy, portMAX_DELAY);//interrupt way
     LastPacketTick = xTaskGetTickCount();
+    LedseqRun(LEDL,seq_linkup);
 //    reg_state = nrfReadReg(REG_RPD);//
 //    reg_state = nrfReadReg(REG_STATUS); //REG_FIFO_STATUS nrfReadReg(REG_FIFO_STATUS)&0x02
 //    if(reg_state&0x40)
@@ -317,7 +318,8 @@ void radiolinkInit(void)
   
   //check the hardware whether existence
   isInit = nrf24l01Check();
-  if(!isInit)LedseqRun(LEDR,seq_armed);//seq_linkup
+  if(!isInit)
+    LedseqRun(LEDR,seq_armed);//seq_linkup
  
   //set the interrupt function
   nrfSetInterruptCallback(interruptCallback);
